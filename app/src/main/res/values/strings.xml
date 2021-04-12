@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NewsBreak</string>
+    <string name="open_button">Open</string>
+    <string name="open_button_toast">Opening</string>
 </resources>
