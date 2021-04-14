@@ -50,10 +50,11 @@ class NewsFetchAsyncTask (private val q : String? = null,
 
 
     override fun doInBackground(vararg params: String?): String {
+        val apiKey = R.string.api_key.toString()
         val date = Date()
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
         val url =
-            "https://newsapi.org/v2/everything?q=$q&from=$dateString&sortBy=publishedAt&apiKey=34acee49c2054580bc2e8aa1fe0dfcb4&language=en"
+            "https://newsapi.org/v2/everything?q=$q&from=$dateString&sortBy=publishedAt&apiKey=${apiKey}&language=en"
         val s = sendGet(url)
 
         return s
