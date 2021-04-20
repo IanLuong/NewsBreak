@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:background=""
     android:orientation="vertical">
 
     <EditText
@@ -11,8 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:hint="Enter a URL"
-        />
+        android:hint="@string/url_edit_text"
+        android:autofillHints=""
+        android:inputType="textUri" />
 
     <Button
         android:id="@+id/open_button"
