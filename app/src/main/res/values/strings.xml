@@ -7,4 +7,6 @@
     <string name="title_new">New Stories</string>
     <string name="title_following">Following</string>
     <string name="article_image">Article Image</string>
+    <string name="read_more_button">Read more</string>
+    <string name="follow_button">Follow Story</string>
 </resources>

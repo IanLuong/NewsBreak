@@ -6,15 +6,15 @@
     app:startDestination="@+id/navigation_new">
 
     <fragment
-        android:id="@+id/navigation_following"
-        android:name="com.ianluong.newsbreak.ui.following.FollowingFragment"
-        android:label="@string/title_new"
-        tools:layout="@layout/fragment_following" />
-
-    <fragment
         android:id="@+id/navigation_new"
         android:name="com.ianluong.newsbreak.ui.newStories.NewStoriesFragment"
-        android:label="@string/title_following"
+        android:label="@string/title_new"
         tools:layout="@layout/fragment_new_stories" />
+
+    <fragment
+        android:id="@+id/navigation_following"
+        android:name="com.ianluong.newsbreak.ui.following.FollowingFragment"
+        android:label="@string/title_following"
+        tools:layout="@layout/fragment_following" />
 
 </navigation>
