@@ -9,4 +9,6 @@
     <string name="article_image">Article Image</string>
     <string name="read_more_button">Read more</string>
     <string name="follow_button">Follow Story</string>
+    <string name="list_item_article_title">THIS IS THE TITLE</string>
+    <string name="list_item_article_description">THIS IS THE DESCRIPTION</string>
 </resources>
