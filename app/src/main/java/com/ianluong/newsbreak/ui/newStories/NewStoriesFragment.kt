@@ -30,11 +30,6 @@ class NewStoriesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val newsLiveData: LiveData<List<Article>> = NewsFetcher().fetchBBCHeadlines()
-        newsLiveData.observe(this, Observer {articles ->
-            Log.d(TAG, "Response Received: $articles")
-        })
     }
 
     override fun onCreateView(
@@ -50,16 +45,17 @@ class NewStoriesFragment : Fragment() {
         articleRecyclerView = root.findViewById(R.id.article_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        updateUI()
-
         return root
     }
 
-    private fun updateUI() {
-        val articles = newStoriesViewModel.articles
-        val adapter = NewStoryAdapter(articles)
-        articleRecyclerView.adapter = adapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        newStoriesViewModel.articlesLiveData.observe(viewLifecycleOwner, Observer {articles ->
+            articleRecyclerView.adapter = NewStoryAdapter(articles)
+        })
+
     }
+
 
     companion object {
         fun newInstance(): NewStoriesFragment {
