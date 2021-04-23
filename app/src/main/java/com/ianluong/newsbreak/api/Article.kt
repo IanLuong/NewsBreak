@@ -1,4 +1,4 @@
-package com.ianluong.newsbreak
+package com.ianluong.newsbreak.api
 
 import java.util.*
 

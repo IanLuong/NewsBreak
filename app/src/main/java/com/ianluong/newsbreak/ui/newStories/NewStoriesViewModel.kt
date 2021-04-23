@@ -1,9 +1,7 @@
 package com.ianluong.newsbreak.ui.newStories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ianluong.newsbreak.Article
+import com.ianluong.newsbreak.api.Article
 import java.util.*
 
 class NewStoriesViewModel : ViewModel() {

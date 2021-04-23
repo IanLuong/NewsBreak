@@ -10,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ianluong.newsbreak.Article
+import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.R
 
 private const val TAG = "NewStoriesFragment"
@@ -27,6 +30,11 @@ class NewStoriesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val newsLiveData: LiveData<List<Article>> = NewsFetcher().fetchBBCHeadlines()
+        newsLiveData.observe(this, Observer {articles ->
+            Log.d(TAG, "Response Received: $articles")
+        })
     }
 
     override fun onCreateView(
@@ -36,7 +44,6 @@ class NewStoriesFragment : Fragment() {
     ): View? {
         newStoriesViewModel =
             ViewModelProvider(this).get(NewStoriesViewModel::class.java)
-        Log.d(TAG, "Total articles ${newStoriesViewModel.articles.size}")
 
         val root = inflater.inflate(R.layout.fragment_new_stories, container, false)
 

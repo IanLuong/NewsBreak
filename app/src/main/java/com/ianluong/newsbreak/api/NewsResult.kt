@@ -1,4 +1,6 @@
-package com.ianluong.newsbreak
+package com.ianluong.newsbreak.api
+
+import com.ianluong.newsbreak.api.Article
 
 class NewsResult{
     var status : String? = null
