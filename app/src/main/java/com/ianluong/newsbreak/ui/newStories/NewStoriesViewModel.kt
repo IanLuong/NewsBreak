@@ -8,6 +8,6 @@ import java.util.*
 
 class NewStoriesViewModel : ViewModel() {
 
-    val articlesLiveData: LiveData<List<Article>> = NewsFetcher().fetchBBCHeadlines()
+    val articlesLiveData: LiveData<List<Article>> = NewsFetcher().fetchUKHeadlines()
 
 }

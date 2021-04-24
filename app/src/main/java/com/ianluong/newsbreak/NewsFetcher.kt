@@ -49,4 +49,26 @@ class NewsFetcher {
 
         return responseLiveData
     }
+
+    fun fetchUKHeadlines(): LiveData<List<Article>> {
+        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
+        val newsRequest: Call<NewsResult> = newsApi.fetchUKHeadlines()
+
+        newsRequest.enqueue(object: Callback<NewsResult> {
+            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
+                Log.d(TAG, "RESPONSE RECEIVED")
+                val newsResponse : NewsResult? = response.body()
+                val articleResponse = newsResponse?.articles
+
+                responseLiveData.value = articleResponse
+            }
+
+            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
+                Log.e(TAG, "ERROR FETCHING NEWS", t)
+            }
+
+        })
+
+        return responseLiveData
+    }
 }

@@ -8,7 +8,7 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/new_stories_image"
+        android:id="@+id/following_image"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:contentDescription="@string/article_image"
@@ -20,7 +20,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/new_stories_description"
+            android:id="@+id/following_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_article_description"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/new_stories_follow_button"
+            android:id="@+id/following_follow_button"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="36dp"
@@ -37,12 +37,20 @@
             android:contentDescription="@string/follow_button"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/new_stories_read_more_button"
+            app:layout_constraintEnd_toStartOf="@+id/following_read_more_button"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_favorite_foreground" />
 
+        <Button
+            android:id="@+id/following_button"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:text="@string/more_info_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/following_follow_button" />
+
         <ImageButton
-            android:id="@+id/new_stories_read_more_button"
+            android:id="@+id/following_read_more_button"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="36dp"
@@ -55,11 +63,11 @@
             app:srcCompat="@drawable/ic_open_with_browser_foreground" />
 
         <TextView
-            android:id="@+id/new_stories_title"
+            android:id="@+id/following_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_article_title"
-            app:layout_constraintBottom_toTopOf="@+id/new_stories_description"
+            app:layout_constraintBottom_toTopOf="@+id/following_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

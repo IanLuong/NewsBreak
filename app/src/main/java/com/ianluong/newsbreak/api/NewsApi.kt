@@ -12,6 +12,6 @@ interface NewsApi {
     @GET("v2/top-headlines?country=gb&apiKey=34acee49c2054580bc2e8aa1fe0dfcb4")
     fun fetchUKHeadlines(): Call<NewsResult>
 
-    @GET("https://newsapi.org/v2/everything?q=&sources=bbc-news&apiKey=34acee49c2054580bc2e8aa1fe0dfcb4")
+    @GET("v2/everything?q=&sources=bbc-news&apiKey=34acee49c2054580bc2e8aa1fe0dfcb4")
     fun fetchSearch(): Call<NewsResult>
 }

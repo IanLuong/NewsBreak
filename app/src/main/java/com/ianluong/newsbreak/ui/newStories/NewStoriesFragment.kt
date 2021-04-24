@@ -2,26 +2,19 @@ package com.ianluong.newsbreak.ui.newStories
 
 import android.content.Intent
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.api.Article
-import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.R
-import org.w3c.dom.Text
 
 private const val TAG = "NewStoriesFragment"
 
@@ -46,7 +39,7 @@ class NewStoriesFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_new_stories, container, false)
 
-        articleRecyclerView = root.findViewById(R.id.article_recycler_view)
+        articleRecyclerView = root.findViewById(R.id.new_stories_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
         return root
@@ -71,14 +64,14 @@ class NewStoriesFragment : Fragment() {
 
         private lateinit var article: Article
 
-        private val articleTitle: TextView = itemView.findViewById(R.id.list_item_article_title)
-        private val articleDescription: TextView = itemView.findViewById(R.id.list_item_article_description)
-        private val articleImage: ImageView = itemView.findViewById(R.id.list_item_article_image)
-        private val followButton: ImageButton = itemView.findViewById(R.id.follow_button)
-        private val readMoreButton: ImageButton = itemView.findViewById(R.id.read_more_button)
+        private val articleTitle: TextView = itemView.findViewById(R.id.new_stories_title)
+        private val articleDescription: TextView = itemView.findViewById(R.id.new_stories_description)
+        private val articleImage: ImageView = itemView.findViewById(R.id.new_stories_image)
+        private val followButton: ImageButton = itemView.findViewById(R.id.new_stories_follow_button)
+        private val readMoreButton: ImageButton = itemView.findViewById(R.id.new_stories_read_more_button)
 
         fun bind(article: Article) {
-            articleTitle.text = "${article.title} - ${article.author}"
+            articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             //articleImage = article.title TODO add image binding functionality
@@ -119,6 +112,6 @@ class NewStoriesFragment : Fragment() {
 
 
     }
-    }
+}
 
 
