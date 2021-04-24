@@ -2,6 +2,8 @@ package com.ianluong.newsbreak.ui.newStories
 
 import android.content.Intent
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.R
+import org.w3c.dom.Text
 
 private const val TAG = "NewStoriesFragment"
 
@@ -71,10 +75,10 @@ class NewStoriesFragment : Fragment() {
         private val articleDescription: TextView = itemView.findViewById(R.id.list_item_article_description)
         private val articleImage: ImageView = itemView.findViewById(R.id.list_item_article_image)
         private val followButton: ImageButton = itemView.findViewById(R.id.follow_button)
-        private val readMoreButton: Button = itemView.findViewById(R.id.read_more_button)
+        private val readMoreButton: ImageButton = itemView.findViewById(R.id.read_more_button)
 
         fun bind(article: Article) {
-            articleTitle.text = article.title
+            articleTitle.text = "${article.title} - ${article.author}"
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             //articleImage = article.title TODO add image binding functionality
@@ -82,7 +86,8 @@ class NewStoriesFragment : Fragment() {
             setReadMoreButtonListener(readMoreButton, article.url)
         }
 
-        fun setReadMoreButtonListener(button: Button, url: String?) {
+
+        private fun setReadMoreButtonListener(button: ImageButton, url: String?) {
             button.setOnClickListener() {
                 val website = Uri.parse(url) ?: null
                 if (website != null) {
@@ -112,7 +117,8 @@ class NewStoriesFragment : Fragment() {
             return articles.size
         }
 
-        }
+
+    }
     }
 
 

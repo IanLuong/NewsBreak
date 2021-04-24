@@ -11,4 +11,7 @@
     <string name="follow_button">Follow Story</string>
     <string name="list_item_article_title">THIS IS THE TITLE</string>
     <string name="list_item_article_description">THIS IS THE DESCRIPTION</string>
+    <string name="open_in_browser_button">Open in Browser</string>
+    <string name="search_story">Search</string>
+    <string name="list_item_article_author">AUTHOR</string>
 </resources>

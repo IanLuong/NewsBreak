@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_margin="8dp"
     android:padding="8dp">
-
-    <TextView
-        android:id="@+id/list_item_article_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/list_item_article_title" />
 
     <ImageView
         android:id="@+id/list_item_article_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/article_image" />
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:contentDescription="@string/article_image"
+        android:scaleType="centerCrop"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,24 +26,14 @@
             android:layout_height="wrap_content"
             android:text="@string/list_item_article_description"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/follow_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/read_more_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/read_more_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/follow_button"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="36dp"
             android:background="@color/white"
             android:contentDescription="@string/follow_button"
             android:scaleType="fitXY"
@@ -55,6 +42,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_favorite_foreground" />
 
+        <ImageButton
+            android:id="@+id/read_more_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="36dp"
+            android:background="@color/white"
+            android:contentDescription="@string/open_in_browser_button"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_open_with_browser_foreground" />
+
+        <TextView
+            android:id="@+id/list_item_article_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_item_article_title"
+            app:layout_constraintBottom_toTopOf="@+id/list_item_article_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -62,5 +70,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="parent" />
+
 </LinearLayout>
