@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
+import com.squareup.picasso.Picasso
 
 class FollowingFragment : Fragment() {
 
@@ -69,7 +70,7 @@ class FollowingFragment : Fragment() {
             articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
-            //articleImage = article.title TODO add image binding functionality
+            if(article.urlToImage != null) Picasso.with(context).load(article.urlToImage).into(articleImage)
             //followButton.text = article.title TODO add follow button functionality
             setReadMoreButtonListener(readMoreButton, article.url)
         }

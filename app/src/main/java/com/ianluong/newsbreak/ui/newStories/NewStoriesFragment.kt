@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.R
+import com.squareup.picasso.Picasso
 
 private const val TAG = "NewStoriesFragment"
 
@@ -23,11 +24,6 @@ class NewStoriesFragment : Fragment() {
     private lateinit var newStoriesViewModel: NewStoriesViewModel
     private lateinit var articleRecyclerView: RecyclerView
     private var adapter: NewStoryHolder? = null
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +49,6 @@ class NewStoriesFragment : Fragment() {
 
     }
 
-
     companion object {
         fun newInstance(): NewStoriesFragment {
             return NewStoriesFragment()
@@ -74,11 +69,11 @@ class NewStoriesFragment : Fragment() {
             articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
-            //articleImage = article.title TODO add image binding functionality
+
+            if(article.urlToImage != null) Picasso.with(context).load(article.urlToImage).into(articleImage)
             //followButton.text = article.title TODO add follow button functionality
             setReadMoreButtonListener(readMoreButton, article.url)
         }
-
 
         private fun setReadMoreButtonListener(button: ImageButton, url: String?) {
             button.setOnClickListener() {
