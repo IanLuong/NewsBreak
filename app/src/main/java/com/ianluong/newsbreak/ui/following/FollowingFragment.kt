@@ -70,11 +70,19 @@ class FollowingFragment : Fragment() {
             articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
-            if(article.urlToImage != null) Picasso.with(context).load(article.urlToImage).into(articleImage)
+            setImage()
             //followButton.text = article.title TODO add follow button functionality
             setReadMoreButtonListener(readMoreButton, article.url)
         }
 
+        private fun setImage() {
+            if(article.urlToImage != null) {
+                Picasso.with(context).load(article.urlToImage).into(articleImage)
+            }
+            else {
+                Picasso.with(context).load(R.drawable.article_placeholder).into(articleImage)
+            }
+        }
 
         private fun setReadMoreButtonListener(button: ImageButton, url: String?) {
             button.setOnClickListener() {

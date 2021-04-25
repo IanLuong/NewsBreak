@@ -62,6 +62,7 @@ class NewStoriesFragment : Fragment() {
         private val articleTitle: TextView = itemView.findViewById(R.id.new_stories_title)
         private val articleDescription: TextView = itemView.findViewById(R.id.new_stories_description)
         private val articleImage: ImageView = itemView.findViewById(R.id.new_stories_image)
+        private val articleDate: TextView = itemView.findViewById(R.id.new_stories_date)
         private val followButton: ImageButton = itemView.findViewById(R.id.new_stories_follow_button)
         private val readMoreButton: ImageButton = itemView.findViewById(R.id.new_stories_read_more_button)
 
@@ -69,10 +70,19 @@ class NewStoriesFragment : Fragment() {
             articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
-
-            if(article.urlToImage != null) Picasso.with(context).load(article.urlToImage).into(articleImage)
+            articleDate.text = article.publishedAt.toString()
+            setImage()
             //followButton.text = article.title TODO add follow button functionality
             setReadMoreButtonListener(readMoreButton, article.url)
+        }
+
+        private fun setImage() {
+            if(article.urlToImage != null) {
+                Picasso.with(context).load(article.urlToImage).into(articleImage)
+            }
+            else {
+                Picasso.with(context).load(R.drawable.article_placeholder).into(articleImage)
+            }
         }
 
         private fun setReadMoreButtonListener(button: ImageButton, url: String?) {
