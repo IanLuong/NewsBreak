@@ -11,7 +11,7 @@ import java.util.*
 
 class NewStoriesViewModel : ViewModel() {
 
-    val articlesLiveData: LiveData<List<Article>> = NewsFetcher().fetchUKHeadlines()
+    val articlesLiveData: LiveData<List<Article>> = NewsFetcher().fetchNews("UKHeadlines")
 
     private val articleRepository: ArticleRepository = ArticleRepository.get()
     private val articleIdLiveData = MutableLiveData<UUID>()

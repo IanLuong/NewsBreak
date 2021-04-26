@@ -28,46 +28,28 @@ class NewsFetcher {
         newsApi = retrofit.create(NewsApi::class.java)
     }
 
-    fun fetchBBCHeadlines(): LiveData<List<Article>> {
+    fun fetchNews(query: String): LiveData<List<Article>> {
         val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
-        val newsRequest: Call<NewsResult> = newsApi.fetchBBCHeadlines()
 
-        newsRequest.enqueue(object: Callback<NewsResult> {
-            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
-                Log.d(TAG, "RESPONSE RECEIVED")
-                val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
+        val newsRequest: Call<NewsResult> =  when(query) {
+            "BBCHeadlines" -> newsApi.fetchBBCHeadlines()
+            "UKHeadlines" -> newsApi.fetchUKHeadlines()
+            else -> newsApi.fetchSearch()
+        }
+                newsRequest.enqueue(object: Callback<NewsResult> {
+                override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
+                    Log.d(TAG, "RESPONSE RECEIVED")
+                    val newsResponse : NewsResult? = response.body()
+                    val articleResponse = newsResponse?.articles
 
-                responseLiveData.value = articleResponse
-            }
+                    responseLiveData.value = articleResponse
+                }
 
-            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
-                Log.e(TAG, "ERROR FETCHING NEWS", t)
-            }
+                override fun onFailure(call: Call<NewsResult>, t: Throwable) {
+                    Log.e(TAG, "ERROR FETCHING NEWS", t)
+                }
 
-        })
-
-        return responseLiveData
-    }
-
-    fun fetchUKHeadlines(): LiveData<List<Article>> {
-        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
-        val newsRequest: Call<NewsResult> = newsApi.fetchUKHeadlines()
-
-        newsRequest.enqueue(object: Callback<NewsResult> {
-            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
-                Log.d(TAG, "RESPONSE RECEIVED")
-                val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
-
-                responseLiveData.value = articleResponse
-            }
-
-            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
-                Log.e(TAG, "ERROR FETCHING NEWS", t)
-            }
-
-        })
+            })
 
         return responseLiveData
     }
