@@ -67,6 +67,9 @@ class NewStoriesFragment : Fragment() {
         private val readMoreButton: ImageButton = itemView.findViewById(R.id.new_stories_read_more_button)
 
         fun bind(article: Article) {
+
+            this.article = article
+
             articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
@@ -78,10 +81,10 @@ class NewStoriesFragment : Fragment() {
 
         private fun setImage() {
             if(article.urlToImage != null) {
-                Picasso.with(context).load(article.urlToImage).into(articleImage)
+                Picasso.get().load(article.urlToImage).into(articleImage)
             }
             else {
-                Picasso.with(context).load(R.drawable.article_placeholder).into(articleImage)
+                Picasso.get().load(R.drawable.article_placeholder).into(articleImage)
             }
         }
 
