@@ -4,9 +4,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,6 +36,8 @@ class NewStoriesFragment : Fragment() {
         articleRecyclerView = root.findViewById(R.id.new_stories_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        setHasOptionsMenu(true)
+
         return root
     }
 
@@ -47,6 +47,27 @@ class NewStoriesFragment : Fragment() {
             articleRecyclerView.adapter = NewStoryAdapter(articles)
         })
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_new_stories, menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.menu_item_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.apply {
+            setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    newStoriesViewModel.fetchNews(query)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+        }
     }
 
     companion object {

@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.api.ArticleInterceptor
 import com.ianluong.newsbreak.api.NewsApi
 import com.ianluong.newsbreak.api.NewsResult
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,9 +22,14 @@ class NewsFetcher {
     private val newsApi: NewsApi
 
     init {
+        val client = OkHttpClient.Builder()
+            .addInterceptor(ArticleInterceptor())
+            .build()
+
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://newsapi.org/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
         newsApi = retrofit.create(NewsApi::class.java)
@@ -34,7 +41,7 @@ class NewsFetcher {
         val newsRequest: Call<NewsResult> =  when(query) {
             "BBCHeadlines" -> newsApi.fetchBBCHeadlines()
             "UKHeadlines" -> newsApi.fetchUKHeadlines()
-            else -> newsApi.fetchSearch()
+            else -> newsApi.fetchSearch(query)
         }
                 newsRequest.enqueue(object: Callback<NewsResult> {
                 override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {

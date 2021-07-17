@@ -12,10 +12,11 @@
     <string name="list_item_article_title">THIS IS THE TITLE</string>
     <string name="list_item_article_description">THIS IS THE DESCRIPTION</string>
     <string name="open_in_browser_button">Open in Browser</string>
-    <string name="search_story">Search</string>
+    <string name="menu_item_search">Search</string>
     <string name="list_item_article_author">AUTHOR</string>
     <string name="more_info_button">More</string>
 
     <string name="article_title_text">%1$s - %2$s</string>
     <string name="new_stories_date">DATE</string>
+    <string name="menu_item_clear_search">Clear Search</string>
 </resources>
