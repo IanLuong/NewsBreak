@@ -11,15 +11,21 @@ import java.util.*
 
 class NewStoriesViewModel : ViewModel() {
 
-    val articlesLiveData: LiveData<List<Article>> = NewsFetcher().fetchNews("UKHeadlines")
+    val articlesLiveData: LiveData<List<Article>>
 
     private val articleRepository: ArticleRepository = ArticleRepository.get()
     private val articleIdLiveData = MutableLiveData<UUID>()
+
+
 
     var articleLiveData: LiveData<Article?> =
         Transformations.switchMap(articleIdLiveData) {
             articleRepository.getArticle(it)
         }
+
+    init {
+        articlesLiveData = NewsFetcher().fetchNews("UKHeadlines") //UKHeadlines is the default on startup
+    }
 
     fun loadArticle(articleId: UUID) {
         articleIdLiveData.value = articleId
