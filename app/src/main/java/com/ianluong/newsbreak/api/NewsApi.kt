@@ -3,6 +3,7 @@ package com.ianluong.newsbreak.api
 import android.content.res.Resources
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface NewsApi {
     //TODO replace api key in string with call to resource
@@ -16,6 +17,6 @@ interface NewsApi {
     //fun fetchSearch(): Call<NewsResult>
 
     @GET("v2/everything")
-    fun fetchSearch(): Call<NewsResult>
+    fun fetchSearch(@Query("q") query: String): Call<NewsResult>
 
 }

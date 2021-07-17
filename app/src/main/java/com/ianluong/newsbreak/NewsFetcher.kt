@@ -41,7 +41,7 @@ class NewsFetcher {
         val newsRequest: Call<NewsResult> =  when(query) {
             "BBCHeadlines" -> newsApi.fetchBBCHeadlines()
             "UKHeadlines" -> newsApi.fetchUKHeadlines()
-            else -> newsApi.fetchSearch()
+            else -> newsApi.fetchSearch(query)
         }
                 newsRequest.enqueue(object: Callback<NewsResult> {
                 override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {

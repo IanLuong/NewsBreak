@@ -14,24 +14,22 @@ class NewStoriesViewModel : ViewModel() {
     val articlesLiveData: LiveData<List<Article>>
 
     private val articleRepository: ArticleRepository = ArticleRepository.get()
-    private val articleIdLiveData = MutableLiveData<UUID>()
+    private val mutableSearchTerm = MutableLiveData<String>()
 
-
-
-    var articleLiveData: LiveData<Article?> =
-        Transformations.switchMap(articleIdLiveData) {
-            articleRepository.getArticle(it)
-        }
+    private val newsFetcher = NewsFetcher()
 
     init {
-        articlesLiveData = NewsFetcher().fetchNews("UKHeadlines") //UKHeadlines is the default on startup
+        mutableSearchTerm.value = "UKHeadlines"
+
+        articlesLiveData =
+            Transformations.switchMap(mutableSearchTerm) {
+                newsFetcher.fetchNews(it) //UKHeadlines is the default on startup
+            }
+
     }
 
-    fun loadArticle(articleId: UUID) {
-        articleIdLiveData.value = articleId
+    fun fetchNews(query: String = "") {
+        mutableSearchTerm.value = query
     }
 
-    fun saveArticle(article: Article){
-        articleRepository.insertArticle(article)
-    }
 }
