@@ -70,6 +70,16 @@ class NewStoriesFragment : Fragment() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_clear -> {
+                newStoriesViewModel.fetchNews("Cleared")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     companion object {
         fun newInstance(): NewStoriesFragment {
             return NewStoriesFragment()
