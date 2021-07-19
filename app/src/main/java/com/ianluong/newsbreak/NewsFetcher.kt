@@ -35,29 +35,48 @@ class NewsFetcher {
         newsApi = retrofit.create(NewsApi::class.java)
     }
 
-    fun fetchNews(query: String): LiveData<List<Article>> {
+    fun searchUKHeadlines(): LiveData<List<Article>> {
         val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
 
-        val newsRequest: Call<NewsResult> =  when(query) {
-            //TODO Refactor headlines in search
-            "BBCHeadlines" -> newsApi.fetchBBCHeadlines()
-            "UKHeadlines" -> newsApi.fetchUKHeadlines()
-            else -> newsApi.fetchSearch(query)
-        }
-                newsRequest.enqueue(object: Callback<NewsResult> {
-                override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
-                    Log.d(TAG, "RESPONSE RECEIVED")
-                    val newsResponse : NewsResult? = response.body()
-                    val articleResponse = newsResponse?.articles
+        val newsRequest: Call<NewsResult> =  newsApi.fetchUKHeadlines()  //UKHeadlines is the default on startup
 
-                    responseLiveData.value = articleResponse
-                }
+        newsRequest.enqueue(object: Callback<NewsResult> {
+            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
+                Log.d(TAG, "RESPONSE RECEIVED")
+                val newsResponse : NewsResult? = response.body()
+                val articleResponse = newsResponse?.articles
 
-                override fun onFailure(call: Call<NewsResult>, t: Throwable) {
-                    Log.e(TAG, "ERROR FETCHING NEWS", t)
-                }
+                responseLiveData.value = articleResponse
+            }
 
-            })
+            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
+                Log.e(TAG, "ERROR FETCHING NEWS", t)
+            }
+
+        })
+
+        return responseLiveData
+    }
+
+    fun searchNews(query: String): LiveData<List<Article>> {
+        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
+
+        val newsRequest: Call<NewsResult> = newsApi.fetchSearch(query)
+
+        newsRequest.enqueue(object: Callback<NewsResult> {
+            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
+                Log.d(TAG, "RESPONSE RECEIVED")
+                val newsResponse : NewsResult? = response.body()
+                val articleResponse = newsResponse?.articles
+
+                responseLiveData.value = articleResponse
+            }
+
+            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
+                Log.e(TAG, "ERROR FETCHING NEWS", t)
+            }
+
+        })
 
         return responseLiveData
     }

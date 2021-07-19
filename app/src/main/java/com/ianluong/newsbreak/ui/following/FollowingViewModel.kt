@@ -11,6 +11,6 @@ class FollowingViewModel : ViewModel() {
     private val articleDatabase = ArticleRepository.get()
 
     //TODO Take data from database
-    val articles = NewsFetcher().fetchNews("BBCHeadlines")//articleDatabase.getArticles()
+    val articles = NewsFetcher().searchUKHeadlines()//articleDatabase.getArticles()
 
 }

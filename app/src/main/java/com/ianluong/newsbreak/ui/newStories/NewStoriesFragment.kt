@@ -59,7 +59,8 @@ class NewStoriesFragment : Fragment() {
         searchView.apply {
             setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    newStoriesViewModel.fetchNews(query)
+                    newStoriesViewModel.fetchSearch(query)
+                    searchView.clearFocus()
                     return true
                 }
 
@@ -73,7 +74,7 @@ class NewStoriesFragment : Fragment() {
             }
 
             setOnCloseListener {
-                newStoriesViewModel.fetchNews("UKHeadlines")
+                newStoriesViewModel.fetchUKHeadlines()
                 true
             }
         }

@@ -9,8 +9,6 @@ import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
 import java.util.*
 
-private const val DEFAULT_SEARCH = "UKHeadlines"
-
 class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val articlesLiveData: LiveData<List<Article>>
@@ -29,16 +27,21 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
         articlesLiveData =
             Transformations.switchMap(mutableSearchTerm) {
                 if (it.isBlank()) {
-                    newsFetcher.fetchNews(DEFAULT_SEARCH) //UKHeadlines is the default on startup
+                    newsFetcher.searchUKHeadlines()
                 } else {
-                    newsFetcher.fetchNews(it)
+                    newsFetcher.searchNews(it)
                 }
             }
 
     }
 
-    fun fetchNews(query: String = "") {
+    fun fetchSearch(query: String = "") {
         QueryPreferences.setQuery(query, app)
         mutableSearchTerm.value = query
+    }
+
+    fun fetchUKHeadlines() {
+        QueryPreferences.setQuery("", app)
+        mutableSearchTerm.value = ""
     }
 }
