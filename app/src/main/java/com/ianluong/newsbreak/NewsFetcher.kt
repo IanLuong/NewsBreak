@@ -39,6 +39,7 @@ class NewsFetcher {
         val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
 
         val newsRequest: Call<NewsResult> =  when(query) {
+            //TODO Refactor headlines in search
             "BBCHeadlines" -> newsApi.fetchBBCHeadlines()
             "UKHeadlines" -> newsApi.fetchUKHeadlines()
             else -> newsApi.fetchSearch(query)

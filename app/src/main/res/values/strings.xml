@@ -18,5 +18,4 @@
 
     <string name="article_title_text">%1$s - %2$s</string>
     <string name="new_stories_date">DATE</string>
-    <string name="menu_item_clear_search">Clear Search</string>
 </resources>

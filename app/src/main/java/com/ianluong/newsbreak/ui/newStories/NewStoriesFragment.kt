@@ -67,16 +67,15 @@ class NewStoriesFragment : Fragment() {
                     return false
                 }
             })
-        }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_clear -> {
-                newStoriesViewModel.fetchNews("Cleared")
+            setOnSearchClickListener {
+                searchView.setQuery(newStoriesViewModel.searchTerm, false)
+            }
+
+            setOnCloseListener {
+                newStoriesViewModel.fetchNews("UKHeadlines")
                 true
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
