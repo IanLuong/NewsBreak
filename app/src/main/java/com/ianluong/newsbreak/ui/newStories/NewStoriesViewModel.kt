@@ -1,17 +1,20 @@
 package com.ianluong.newsbreak.ui.newStories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.*
 import com.ianluong.newsbreak.ArticleRepository
 import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.api.QueryPreferences
 import java.util.*
 
-class NewStoriesViewModel : ViewModel() {
+class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val articlesLiveData: LiveData<List<Article>>
+
+    val searchTerm: String
+        get() = mutableSearchTerm.value ?: ""
 
     private val articleRepository: ArticleRepository = ArticleRepository.get()
     private val mutableSearchTerm = MutableLiveData<String>()
@@ -19,17 +22,26 @@ class NewStoriesViewModel : ViewModel() {
     private val newsFetcher = NewsFetcher()
 
     init {
-        mutableSearchTerm.value = "UKHeadlines"
+        mutableSearchTerm.value = QueryPreferences.getQuery(app)
 
         articlesLiveData =
             Transformations.switchMap(mutableSearchTerm) {
-                newsFetcher.fetchNews(it) //UKHeadlines is the default on startup
+                if (it.isBlank()) {
+                    newsFetcher.searchUKHeadlines()
+                } else {
+                    newsFetcher.searchNews(it)
+                }
             }
 
     }
 
-    fun fetchNews(query: String = "") {
+    fun fetchSearch(query: String = "") {
+        QueryPreferences.setQuery(query, app)
         mutableSearchTerm.value = query
     }
 
+    fun fetchUKHeadlines() {
+        QueryPreferences.setQuery("", app)
+        mutableSearchTerm.value = ""
+    }
 }

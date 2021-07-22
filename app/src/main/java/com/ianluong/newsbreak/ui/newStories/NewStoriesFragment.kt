@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -21,12 +22,9 @@ class NewStoriesFragment : Fragment() {
 
     private lateinit var newStoriesViewModel: NewStoriesViewModel
     private lateinit var articleRecyclerView: RecyclerView
-    private var adapter: NewStoryHolder? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+              savedInstanceState: Bundle?
     ): View? {
         newStoriesViewModel =
             ViewModelProvider(this).get(NewStoriesViewModel::class.java)
@@ -59,7 +57,13 @@ class NewStoriesFragment : Fragment() {
         searchView.apply {
             setOnQueryTextListener(object: SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    newStoriesViewModel.fetchNews(query)
+                    newStoriesViewModel.fetchSearch(query)
+                    searchView.onActionViewCollapsed()
+
+                    if(articleRecyclerView.adapter?.itemCount == 0) {
+                        Toast.makeText(context, "Sorry, no articles were found", Toast.LENGTH_SHORT).show()
+                    }
+
                     return true
                 }
 
@@ -67,6 +71,16 @@ class NewStoriesFragment : Fragment() {
                     return false
                 }
             })
+
+            setOnSearchClickListener {
+                searchView.setQuery(newStoriesViewModel.searchTerm, false)
+            }
+
+            setOnCloseListener {
+                newStoriesViewModel.fetchUKHeadlines()
+                searchView.onActionViewCollapsed()
+                true
+            }
         }
     }
 
