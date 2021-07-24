@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -12,8 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ianluong.newsbreak.api.Article
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ianluong.newsbreak.R
+import com.ianluong.newsbreak.api.Article
 import com.squareup.picasso.Picasso
 
 private const val TAG = "NewStoriesFragment"
@@ -22,15 +22,18 @@ class NewStoriesFragment : Fragment() {
 
     private lateinit var newStoriesViewModel: NewStoriesViewModel
     private lateinit var articleRecyclerView: RecyclerView
+    private lateinit var articleSwipeRefreshLayout: SwipeRefreshLayout
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-              savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         newStoriesViewModel =
             ViewModelProvider(this).get(NewStoriesViewModel::class.java)
 
         val root = inflater.inflate(R.layout.fragment_new_stories, container, false)
 
+        articleSwipeRefreshLayout = root.findViewById(R.id.new_stories_swipe_refresh_layout)
         articleRecyclerView = root.findViewById(R.id.new_stories_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -41,10 +44,14 @@ class NewStoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        newStoriesViewModel.articlesLiveData.observe(viewLifecycleOwner, Observer {articles ->
+        newStoriesViewModel.articlesLiveData.observe(viewLifecycleOwner, { articles ->
             articleRecyclerView.adapter = NewStoryAdapter(articles)
         })
 
+        articleSwipeRefreshLayout.setOnRefreshListener{
+            newStoriesViewModel.fetchSearch(newStoriesViewModel.searchTerm)
+            articleSwipeRefreshLayout.isRefreshing = false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,13 +62,14 @@ class NewStoriesFragment : Fragment() {
         val searchView = searchItem.actionView as SearchView
 
         searchView.apply {
-            setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     newStoriesViewModel.fetchSearch(query)
                     searchView.onActionViewCollapsed()
 
-                    if(articleRecyclerView.adapter?.itemCount == 0) {
-                        Toast.makeText(context, "Sorry, no articles were found", Toast.LENGTH_SHORT).show()
+                    if (articleRecyclerView.adapter?.itemCount == 0) {
+                        Toast.makeText(context, "Sorry, no articles were found", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
                     return true
@@ -95,17 +103,21 @@ class NewStoriesFragment : Fragment() {
         private lateinit var article: Article
 
         private val articleTitle: TextView = itemView.findViewById(R.id.new_stories_title)
-        private val articleDescription: TextView = itemView.findViewById(R.id.new_stories_description)
+        private val articleDescription: TextView =
+            itemView.findViewById(R.id.new_stories_description)
         private val articleImage: ImageView = itemView.findViewById(R.id.new_stories_image)
         private val articleDate: TextView = itemView.findViewById(R.id.new_stories_date)
-        private val followButton: ImageButton = itemView.findViewById(R.id.new_stories_follow_button)
-        private val readMoreButton: ImageButton = itemView.findViewById(R.id.new_stories_read_more_button)
+        private val followButton: ImageButton =
+            itemView.findViewById(R.id.new_stories_follow_button)
+        private val readMoreButton: ImageButton =
+            itemView.findViewById(R.id.new_stories_read_more_button)
 
         fun bind(article: Article) {
 
             this.article = article
 
-            articleTitle.text = getString(R.string.article_title_text, article.title, article.author)
+            articleTitle.text =
+                getString(R.string.article_title_text, article.title, article.author)
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()
@@ -115,16 +127,15 @@ class NewStoriesFragment : Fragment() {
         }
 
         private fun setImage() {
-            if(article.urlToImage != null) {
+            if (article.urlToImage != null) {
                 Picasso.get().load(article.urlToImage).into(articleImage)
-            }
-            else {
+            } else {
                 Picasso.get().load(R.drawable.article_placeholder).into(articleImage)
             }
         }
 
         private fun setReadMoreButtonListener(button: ImageButton, url: String?) {
-            button.setOnClickListener() {
+            button.setOnClickListener {
                 val website = Uri.parse(url) ?: null
                 if (website != null) {
                     val intent = Intent(Intent.ACTION_VIEW, website)
