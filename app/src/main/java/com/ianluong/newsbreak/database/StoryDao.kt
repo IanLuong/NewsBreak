@@ -17,4 +17,6 @@ interface StoryDao {
     @Transaction
     @Query("SELECT * FROM story")
     fun getStoriesWithArticles(): LiveData<List<StoryWithArticles>>
+
+    
 }

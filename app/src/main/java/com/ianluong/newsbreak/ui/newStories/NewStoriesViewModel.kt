@@ -16,7 +16,6 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
     val searchTerm: String
         get() = mutableSearchTerm.value ?: ""
 
-    private val articleRepository: ArticleRepository = ArticleRepository.get()
     private val mutableSearchTerm = MutableLiveData<String>()
 
     private val newsFetcher = NewsFetcher()

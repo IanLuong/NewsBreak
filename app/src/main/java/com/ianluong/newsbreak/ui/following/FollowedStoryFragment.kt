@@ -20,7 +20,7 @@ class FollowedStoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.followed_story_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_followed_story, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
