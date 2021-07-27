@@ -51,6 +51,7 @@ class NewStoriesFragment : Fragment() {
         articleSwipeRefreshLayout.setOnRefreshListener{
             newStoriesViewModel.fetchSearch(newStoriesViewModel.searchTerm)
             articleSwipeRefreshLayout.isRefreshing = false
+            Toast.makeText(context, "Refreshed latest articles", Toast.LENGTH_SHORT).show()
         }
     }
 
