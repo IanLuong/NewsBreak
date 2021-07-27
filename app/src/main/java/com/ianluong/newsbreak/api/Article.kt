@@ -14,5 +14,7 @@ class Article {
     var urlToImage : String? = null
     var publishedAt : Date? = null
     var author: String? = null
+
+    var storyID: UUID? = null
 }
 

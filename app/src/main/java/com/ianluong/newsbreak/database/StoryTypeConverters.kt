@@ -7,7 +7,17 @@ import java.util.*
 
 class StoryTypeConverters {
 
-    var gson: Gson = Gson()
+    @TypeConverter
+    fun fromDate(date: Date?): Long? {
+        return date?.time
+    }
+
+    @TypeConverter
+    fun toDate(millisSinceEpoch: Long?): Date? {
+        return millisSinceEpoch?.let {
+            Date(it)
+        }
+    }
 
     @TypeConverter
     fun toUUID(id: String?): UUID? {
@@ -18,6 +28,4 @@ class StoryTypeConverters {
     fun fromUUID(id: UUID?): String? {
         return id?.toString()
     }
-
-
 }

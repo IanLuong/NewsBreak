@@ -1,6 +1,7 @@
 package com.ianluong.newsbreak
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.ianluong.newsbreak.database.Story
 import com.ianluong.newsbreak.database.StoryDatabase
@@ -18,9 +19,9 @@ class StoryRepository private constructor(context: Context) {
 
     private val storyDao = database.storyDao()
 
-    fun getStories(): List<Story> = storyDao.getStories()
+    fun getStories(): LiveData<List<Story>> = storyDao.getStories()
 
-    fun getStory(id: UUID): Story? = storyDao.getStory(id)
+    fun getStory(id: UUID): LiveData<Story?> = storyDao.getStory(id)
 
     companion object {
         private var INSTANCE: StoryRepository? = null
