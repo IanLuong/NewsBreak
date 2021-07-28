@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -102,15 +101,15 @@ class NewStoriesFragment : Fragment() {
 
         private lateinit var article: Article
 
-        private val articleTitle: TextView = itemView.findViewById(R.id.new_stories_title)
+        private val articleTitle: TextView = itemView.findViewById(R.id.article_title)
         private val articleDescription: TextView =
-            itemView.findViewById(R.id.new_stories_description)
-        private val articleImage: ImageView = itemView.findViewById(R.id.new_stories_image)
-        private val articleDate: TextView = itemView.findViewById(R.id.new_stories_date)
+            itemView.findViewById(R.id.article_description)
+        private val articleImage: ImageView = itemView.findViewById(R.id.article_image)
+        private val articleDate: TextView = itemView.findViewById(R.id.article_date)
         private val followButton: ImageButton =
-            itemView.findViewById(R.id.new_stories_follow_button)
+            itemView.findViewById(R.id.article_follow_button)
         private val readMoreButton: ImageButton =
-            itemView.findViewById(R.id.new_stories_read_more_button)
+            itemView.findViewById(R.id.article_read_more_button)
 
         fun bind(article: Article) {
 
@@ -151,7 +150,7 @@ class NewStoriesFragment : Fragment() {
     private inner class NewStoryAdapter(var articles: List<Article>) :
         RecyclerView.Adapter<NewStoryHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewStoryHolder {
-            val view = layoutInflater.inflate(R.layout.list_item_story, parent, false)
+            val view = layoutInflater.inflate(R.layout.list_item_article, parent, false)
             return NewStoryHolder(view)
         }
 

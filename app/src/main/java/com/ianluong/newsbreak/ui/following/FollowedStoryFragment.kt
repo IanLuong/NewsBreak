@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -15,7 +16,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
 import com.squareup.picasso.Picasso
@@ -56,13 +56,14 @@ class FollowedStoryFragment : Fragment() {
 
         private lateinit var article: Article
 
-        private val articleTitle: TextView = itemView.findViewById(R.id.new_stories_title)
+        private val articleTitle: TextView = itemView.findViewById(R.id.article_title)
         private val articleDescription: TextView =
-            itemView.findViewById(R.id.new_stories_description)
-        private val articleImage: ImageView = itemView.findViewById(R.id.new_stories_image)
-        private val articleDate: TextView = itemView.findViewById(R.id.new_stories_date)
+            itemView.findViewById(R.id.article_description)
+        private val articleImage: ImageView = itemView.findViewById(R.id.article_image)
+        private val articleDate: TextView = itemView.findViewById(R.id.article_date)
+        private val followButton: ImageButton = itemView.findViewById(R.id.article_follow_button)
         private val readMoreButton: ImageButton =
-            itemView.findViewById(R.id.new_stories_read_more_button)
+            itemView.findViewById(R.id.article_read_more_button)
 
         fun bind(article: Article) {
 
@@ -73,6 +74,7 @@ class FollowedStoryFragment : Fragment() {
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()
+            followButton.visibility = GONE
             setImage()
             setReadMoreButtonListener(readMoreButton, article.url)
         }
@@ -102,7 +104,7 @@ class FollowedStoryFragment : Fragment() {
     private inner class FollowedStoryAdapter(var articles: List<Article>) :
         RecyclerView.Adapter<FollowedStoryHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowedStoryHolder {
-            val view = layoutInflater.inflate(R.layout.list_item_story, parent, false)
+            val view = layoutInflater.inflate(R.layout.list_item_article, parent, false)
             return FollowedStoryHolder(view)
         }
 
