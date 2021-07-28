@@ -1,23 +1,28 @@
 package com.ianluong.newsbreak.ui.following
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.ianluong.newsbreak.ArticleRepository
-import com.ianluong.newsbreak.NewsFetcher
-import com.ianluong.newsbreak.api.Article
-import com.ianluong.newsbreak.api.QueryPreferences
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.database.Story
-import kotlin.random.Random
-import kotlin.random.asJavaRandom
+import java.util.*
 
 class FollowingViewModel(app: Application) : AndroidViewModel(app) {
 
-    //private val articleDatabase = ArticleRepository.get()
+    private val storyRepository = StoryRepository.get()
 
     //TODO Take data from database //articleDatabase.getArticles()
-    val storiesLiveData: LiveData<List<Story>>
+    //val storiesLiveData: LiveData<List<Story>>
     private val mutableSearchTerm = MutableLiveData<String>()
 
+    private val storyIDLiveData = MutableLiveData<UUID>()
+    val storiesLiveData: LiveData<List<Story>> = Transformations.switchMap(mutableSearchTerm) {
+        storyRepository.getStories()
+    }
+
+    /*
     init {
         mutableSearchTerm.value = QueryPreferences.getQuery(app)
 
@@ -33,6 +38,13 @@ class FollowingViewModel(app: Application) : AndroidViewModel(app) {
         storiesLiveData = Transformations.switchMap(mutableSearchTerm) {
             responseLiveData
         }
+    }*/
+
+    fun updateStory() {
+        storyRepository.insertStory(Story("Sam"))
     }
 
+    fun addArticle() {
+
+    }
 }

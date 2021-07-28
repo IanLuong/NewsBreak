@@ -1,9 +1,8 @@
 package com.ianluong.newsbreak.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
+import com.ianluong.newsbreak.api.Article
 import java.util.*
 
 @Dao
@@ -21,5 +20,11 @@ interface StoryDao {
     @Transaction
     @Query("SELECT * FROM story WHERE id=(:id)")
     fun getStoryWithArticles(id: UUID): LiveData<StoryWithArticles>
+
+    @Update
+    fun updateStory(story: Story)
+
+    @Insert
+    fun insertStory(story: Story)
 
 }

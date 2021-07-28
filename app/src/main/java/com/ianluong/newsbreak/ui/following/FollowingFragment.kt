@@ -51,7 +51,7 @@ class FollowingFragment : Fragment() {
 
         followingRecyclerView = root.findViewById(R.id.following_recycler_view)
         followingRecyclerView.layoutManager = LinearLayoutManager(context)
-
+        followingViewModel.updateStory()
         return root
     }
 
