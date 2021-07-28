@@ -68,7 +68,6 @@ class FollowingFragment : Fragment() {
         }
     }
 
-    //TODO Fix the binding
     private inner class FollowingHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private lateinit var story: Story
@@ -83,12 +82,10 @@ class FollowingFragment : Fragment() {
             storyTitle.setTypeface(null, Typeface.BOLD)
 
             moreButton.setOnClickListener {
-                val fragment = FollowedStoryFragment()
-                //activity?.supportFragmentManager?.beginTransaction()
-                //    ?.replace(R.id.following_frame_layout, fragment)
-                //    ?.commit()
                 //TODO handle click to open followed story view
-                val intent = Intent(activity, FollowedStoryActivity::class.java)
+                val intent = Intent(context, FollowedStoryActivity::class.java)
+                intent.putExtra("STORY_ID", story.id)
+                intent.putExtra("STORY_TITLE", story.title)
                 startActivity(intent)
             }
         }

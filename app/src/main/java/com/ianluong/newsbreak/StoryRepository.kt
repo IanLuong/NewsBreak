@@ -26,6 +26,8 @@ class StoryRepository private constructor(context: Context) {
 
     fun getStoriesWithArticles(): LiveData<List<StoryWithArticles>> = storyDao.getStoriesWithArticles()
 
+    fun getStoryWithArticles(id: UUID): LiveData<StoryWithArticles> = storyDao.getStoryWithArticles(id)
+
     companion object {
         private var INSTANCE: StoryRepository? = null
 

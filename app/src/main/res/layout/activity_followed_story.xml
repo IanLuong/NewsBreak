@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/followed_story_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:name="com.ianluong.newsbreak.ui.following.FollowedStoryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
