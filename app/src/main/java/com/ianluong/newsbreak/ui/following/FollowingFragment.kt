@@ -1,29 +1,44 @@
 package com.ianluong.newsbreak.ui.following
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ianluong.newsbreak.FollowedStoryActivity
 import com.ianluong.newsbreak.R
+import com.ianluong.newsbreak.SearchActivity
 import com.ianluong.newsbreak.database.Story
-import com.squareup.picasso.Picasso
+import java.util.*
+
 
 class FollowingFragment : Fragment() {
 
+    interface Callbacks {
+        fun onStorySelected(id: UUID)
+    }
+
+    private var callbacks: Callbacks? = null
     private lateinit var followingViewModel: FollowingViewModel
     private lateinit var followingRecyclerView: RecyclerView
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +60,6 @@ class FollowingFragment : Fragment() {
         followingViewModel.storiesLiveData.observe(viewLifecycleOwner, { stories ->
             followingRecyclerView.adapter = FollowingAdapter(stories)
         })
-
     }
 
     companion object {
@@ -55,19 +69,28 @@ class FollowingFragment : Fragment() {
     }
 
     //TODO Fix the binding
-    private inner class FollowingHolder(view: View): RecyclerView.ViewHolder(view) {
+    private inner class FollowingHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private lateinit var story: Story
 
         private val storyTitle: TextView = itemView.findViewById(R.id.following_title)
+        private val moreButton: Button = itemView.findViewById(R.id.following_button)
 
         fun bind(story: Story) {
 
             this.story = story
-
-            storyTitle.text =
-                getString(R.string.article_title_text, story.title, story.id)
+            storyTitle.text = story.title
             storyTitle.setTypeface(null, Typeface.BOLD)
+
+            moreButton.setOnClickListener {
+                val fragment = FollowedStoryFragment()
+                //activity?.supportFragmentManager?.beginTransaction()
+                //    ?.replace(R.id.following_frame_layout, fragment)
+                //    ?.commit()
+                //TODO handle click to open followed story view
+                val intent = Intent(activity, FollowedStoryActivity::class.java)
+                startActivity(intent)
+            }
         }
 
     }

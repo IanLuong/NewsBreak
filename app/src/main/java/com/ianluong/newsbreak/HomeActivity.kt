@@ -7,8 +7,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.ianluong.newsbreak.ui.following.FollowingFragment
+import java.util.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), FollowingFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,4 +28,9 @@ class HomeActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun onStorySelected(id: UUID) {
+        TODO("Not yet implemented")
+    }
+
 }
