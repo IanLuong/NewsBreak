@@ -31,6 +31,8 @@ class StoryRepository private constructor(context: Context) {
 
     fun getStoryWithArticles(id: UUID): LiveData<StoryWithArticles> = storyDao.getStoryWithArticles(id)
 
+    fun getArticlesWithStoryID(storyID: UUID): LiveData<List<Article>> = storyDao.getArticlesWithStoryID(storyID)
+
     fun updateStory(story: Story) {
         executor.execute() {
             storyDao.updateStory(story)
@@ -40,6 +42,22 @@ class StoryRepository private constructor(context: Context) {
     fun insertStory(story: Story) {
         executor.execute() {
             storyDao.insertStory(story)
+        }
+    }
+
+    fun getArticles(): LiveData<List<Article>> = storyDao.getArticles()
+
+    fun getArticle(id: UUID): LiveData<Article?> = storyDao.getArticle(id)
+
+    fun updateArticle(article: Article) {
+        executor.execute() {
+            storyDao.updateArticle(article)
+        }
+    }
+
+    fun insertArticle(article: Article) {
+        executor.execute() {
+            storyDao.insertArticle(article)
         }
     }
 

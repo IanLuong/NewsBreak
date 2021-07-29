@@ -22,23 +22,8 @@ import java.util.*
 
 class FollowingFragment : Fragment() {
 
-    interface Callbacks {
-        fun onStorySelected(id: UUID)
-    }
-
-    private var callbacks: Callbacks? = null
     private lateinit var followingViewModel: FollowingViewModel
     private lateinit var followingRecyclerView: RecyclerView
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,9 +67,8 @@ class FollowingFragment : Fragment() {
             storyTitle.setTypeface(null, Typeface.BOLD)
 
             moreButton.setOnClickListener {
-                //TODO handle click to open followed story view
                 val intent = Intent(context, FollowedStoryActivity::class.java)
-                intent.putExtra("STORY_ID", story.id)
+                intent.putExtra("STORY_ID", story.id.toString())
                 intent.putExtra("STORY_TITLE", story.title)
                 startActivity(intent)
             }

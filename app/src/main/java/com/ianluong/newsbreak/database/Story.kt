@@ -8,8 +8,9 @@ import com.ianluong.newsbreak.api.Article
 import java.util.*
 
 @Entity
-class Story(var title: String? = null) {
+class Story {
     @PrimaryKey var id: UUID = UUID.randomUUID()
+    var title: String? = null
 }
 
 data class StoryWithArticles(

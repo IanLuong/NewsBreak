@@ -8,39 +8,19 @@ import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
 import com.ianluong.newsbreak.database.StoryDatabase
 import com.ianluong.newsbreak.database.StoryWithArticles
+import java.util.*
 
-class FollowedStoryViewModel(private val app: Application) : AndroidViewModel(app) {
+class FollowedStoryViewModel(): ViewModel() {
     // TODO: Implement the ViewModel
-    val articlesLiveData: LiveData<List<Article>>
+    private val storyRepository = StoryRepository.get()
+    private val storyIDLiveData = MutableLiveData<UUID>()
 
-    val searchTerm: String
-        get() = mutableSearchTerm.value ?: ""
+    var articlesLiveData: LiveData<List<Article>> =
+        Transformations.switchMap(storyIDLiveData) {
+            storyRepository.getArticlesWithStoryID(storyIDLiveData.value!!)
+        }
 
-    private val mutableSearchTerm = MutableLiveData<String>()
-
-    private val newsFetcher = NewsFetcher()
-
-    init {
-        mutableSearchTerm.value = QueryPreferences.getQuery(app)
-
-        articlesLiveData =
-            Transformations.switchMap(mutableSearchTerm) {
-                if (it.isBlank()) {
-                    newsFetcher.searchUKHeadlines()
-                } else {
-                    newsFetcher.searchNews(it)
-                }
-            }
-
-    }
-
-    fun fetchSearch(query: String = "") {
-        QueryPreferences.setQuery(query, app)
-        mutableSearchTerm.value = query
-    }
-
-    fun fetchUKHeadlines() {
-        QueryPreferences.setQuery("", app)
-        mutableSearchTerm.value = ""
+    fun loadArticles(storyID: UUID) {
+        storyIDLiveData.value = storyID
     }
 }

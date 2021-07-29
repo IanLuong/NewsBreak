@@ -1,11 +1,11 @@
 package com.ianluong.newsbreak.ui.following
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -14,20 +14,33 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
 import com.squareup.picasso.Picasso
+import java.util.*
+
+private const val ARG_STORY_ID = "story_id"
 
 class FollowedStoryFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FollowedStoryFragment()
+        fun newInstance(storyID: String): FollowedStoryFragment {
+            val args = Bundle().apply {
+                putString(ARG_STORY_ID, storyID)
+            }
+            return FollowedStoryFragment().apply {
+                arguments = args
+            }
+        }
     }
 
     private lateinit var followedStoryViewModel: FollowedStoryViewModel
     private lateinit var articleRecyclerView: RecyclerView
+    private lateinit var storyID: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +48,10 @@ class FollowedStoryFragment : Fragment() {
     ): View? {
         followedStoryViewModel =
             ViewModelProvider(this).get(FollowedStoryViewModel::class.java)
+        storyID = arguments?.getString(ARG_STORY_ID).toString()
+        followedStoryViewModel.loadArticles(UUID.fromString(storyID))
 
-        val root =  inflater.inflate(R.layout.fragment_followed_story, container, false)
+        val root = inflater.inflate(R.layout.fragment_followed_story, container, false)
 
         articleRecyclerView = root.findViewById(R.id.followed_story_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
