@@ -126,10 +126,10 @@ class NewStoriesFragment : Fragment() {
         }
 
         private fun setImage() {
-            if (article.urlToImage != null) {
-                Picasso.get().load(article.urlToImage).into(articleImage)
-            } else {
+            if (article.urlToImage == null || article.urlToImage!!.isEmpty()) {
                 Picasso.get().load(R.drawable.article_placeholder).into(articleImage)
+            } else{
+                Picasso.get().load(article.urlToImage).into(articleImage)
             }
         }
 
