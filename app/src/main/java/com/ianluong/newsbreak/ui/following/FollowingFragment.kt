@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +44,22 @@ class FollowingFragment : Fragment() {
         followingViewModel.storiesLiveData.observe(viewLifecycleOwner, { stories ->
             followingRecyclerView.adapter = FollowingAdapter(stories)
         })
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_following, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menu_item_add_story) {
+            Toast.makeText(context, "PLACEHOLDER: MADE A STORY", Toast.LENGTH_SHORT).show()
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 
     companion object {
