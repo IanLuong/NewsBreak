@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
 import com.squareup.picasso.Picasso
+import java.util.*
 
 private const val TAG = "NewStoriesFragment"
 
@@ -121,7 +122,7 @@ class NewStoriesFragment : Fragment() {
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()
             setImage()
-            //followButton.text = article.title TODO add follow button functionality
+            setFollowButtonListener(followButton, article)
             setReadMoreButtonListener(readMoreButton, article.url)
         }
 
@@ -130,6 +131,15 @@ class NewStoriesFragment : Fragment() {
                 Picasso.get().load(R.drawable.article_placeholder).into(articleImage)
             } else{
                 Picasso.get().load(article.urlToImage).into(articleImage)
+            }
+        }
+
+        private fun setFollowButtonListener(button: ImageButton, article: Article) {
+            button.setOnClickListener {
+                article.storyID = UUID.fromString("4b5fcb60-f0fa-4928-8f4a-d0da75d489c4")
+                newStoriesViewModel.insertArticle(article)
+                button.isPressed = true
+                Toast.makeText(context, "Article added", Toast.LENGTH_SHORT).show()
             }
         }
 
