@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso
 import java.util.*
 
 private const val TAG = "NewStoriesFragment"
+private const val DIALOG_STORY_PICKER = "DialogStoryPicker"
+private const val REQUEST_STORY = 0 //A constant used for the dialog request code
 
 class NewStoriesFragment : Fragment() {
 
@@ -137,9 +139,12 @@ class NewStoriesFragment : Fragment() {
         private fun setFollowButtonListener(button: ImageButton, article: Article) {
             button.setOnClickListener {
                 article.storyID = UUID.fromString("4b5fcb60-f0fa-4928-8f4a-d0da75d489c4")
-                newStoriesViewModel.insertArticle(article)
+                //newStoriesViewModel.insertArticle(article)
                 button.isPressed = true
-                Toast.makeText(context, "Article added", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "Article added", Toast.LENGTH_SHORT).show()
+                StoryPickerFragment().apply {
+                    show(this@NewStoriesFragment.childFragmentManager, DIALOG_STORY_PICKER)
+                }
             }
         }
 
