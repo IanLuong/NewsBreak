@@ -18,6 +18,8 @@ import com.ianluong.newsbreak.SearchActivity
 import com.ianluong.newsbreak.database.Story
 import java.util.*
 
+private const val DIALOG_STORY_ADD = "DialogStoryADD"
+private const val REQUEST_ADD_STORY = 1
 
 class FollowingFragment : Fragment() {
 
@@ -54,11 +56,14 @@ class FollowingFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_item_add_story) {
+        return if(item.itemId == R.id.menu_item_add_story) {
             Toast.makeText(context, "PLACEHOLDER: MADE A STORY", Toast.LENGTH_SHORT).show()
-            return true
+            StoryAddFragment().apply {
+                show(this@FollowingFragment.childFragmentManager, DIALOG_STORY_ADD)
+            }
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 
