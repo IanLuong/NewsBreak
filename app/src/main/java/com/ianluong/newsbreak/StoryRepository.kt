@@ -61,6 +61,13 @@ class StoryRepository private constructor(context: Context) {
         }
     }
 
+    fun deleteStoryAndArticles(story: Story) {
+        executor.execute() {
+            storyDao.deleteStory(story.id)
+            storyDao.deleteArticles(story.id)
+        }
+    }
+
     companion object {
         private var INSTANCE: StoryRepository? = null
 

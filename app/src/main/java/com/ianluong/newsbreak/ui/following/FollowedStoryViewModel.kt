@@ -6,6 +6,7 @@ import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
+import com.ianluong.newsbreak.database.Story
 import com.ianluong.newsbreak.database.StoryDatabase
 import com.ianluong.newsbreak.database.StoryWithArticles
 import java.util.*
@@ -20,7 +21,11 @@ class FollowedStoryViewModel(): ViewModel() {
             storyRepository.getArticlesWithStoryID(storyIDLiveData.value!!)
         }
 
-    fun loadArticles(storyID: UUID) {
-        storyIDLiveData.value = storyID
+    fun loadArticles(story: Story) {
+        storyIDLiveData.value = story.id
+    }
+
+    fun deleteStoryAndArticles(story: Story) {
+        storyRepository.deleteStoryAndArticles(story)
     }
 }

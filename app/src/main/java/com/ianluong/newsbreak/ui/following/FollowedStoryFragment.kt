@@ -1,15 +1,11 @@
 package com.ianluong.newsbreak.ui.following
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.GONE
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,17 +16,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
 
-private const val ARG_STORY_ID = "story_id"
+private const val ARG_STORY = "story"
+private const val DIALOG_STORY_DELETE = "DialogStoryDelete"
+private const val REQUEST_DELETE_STORY = 2
 
-class FollowedStoryFragment : Fragment() {
+
+class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
     companion object {
-        fun newInstance(storyID: String): FollowedStoryFragment {
+        fun newInstance(story: Story): FollowedStoryFragment {
             val args = Bundle().apply {
-                putString(ARG_STORY_ID, storyID)
+                putSerializable(ARG_STORY, story)
             }
             return FollowedStoryFragment().apply {
                 arguments = args
@@ -40,7 +40,12 @@ class FollowedStoryFragment : Fragment() {
 
     private lateinit var followedStoryViewModel: FollowedStoryViewModel
     private lateinit var articleRecyclerView: RecyclerView
-    private lateinit var storyID: String
+    private lateinit var story: Story
+
+    override fun onStoryDeleted(story: Story) {
+        followedStoryViewModel.deleteStoryAndArticles(story)
+        activity?.finish()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +53,8 @@ class FollowedStoryFragment : Fragment() {
     ): View? {
         followedStoryViewModel =
             ViewModelProvider(this).get(FollowedStoryViewModel::class.java)
-        storyID = arguments?.getString(ARG_STORY_ID).toString()
-        followedStoryViewModel.loadArticles(UUID.fromString(storyID))
+        story = arguments?.getSerializable(ARG_STORY) as Story
+        followedStoryViewModel.loadArticles(story)
 
         val root = inflater.inflate(R.layout.fragment_followed_story, container, false)
 
@@ -64,7 +69,25 @@ class FollowedStoryFragment : Fragment() {
         followedStoryViewModel.articlesLiveData.observe(viewLifecycleOwner, { articles ->
             articleRecyclerView.adapter = FollowedStoryAdapter(articles)
         })
+        setHasOptionsMenu(true)
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_followed_story, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //TODO Replace deprecated functions
+        return if(item.itemId == R.id.menu_item_delete_story) {
+            StoryDeleteFragment.newInstance(story).apply {
+                setTargetFragment(this@FollowedStoryFragment, REQUEST_DELETE_STORY)
+                show(this@FollowedStoryFragment.requireFragmentManager(), DIALOG_STORY_DELETE)
+            }
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     private inner class FollowedStoryHolder(view: View) : RecyclerView.ViewHolder(view) {

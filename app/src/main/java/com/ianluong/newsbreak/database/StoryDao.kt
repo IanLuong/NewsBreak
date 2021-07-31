@@ -36,6 +36,12 @@ interface StoryDao {
     @Insert
     fun insertStory(story: Story)
 
+    @Query("DELETE FROM story WHERE id=(:id)")
+    fun deleteStory(id: UUID)
+
+    @Query("DELETE FROM article WHERE storyID=(:storyID)")
+    fun deleteArticles(storyID: UUID)
+
     @Update
     fun updateArticle(article: Article)
 

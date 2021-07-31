@@ -1,8 +1,6 @@
 package com.ianluong.newsbreak.ui.following
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
@@ -14,11 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ianluong.newsbreak.FollowedStoryActivity
 import com.ianluong.newsbreak.R
-import com.ianluong.newsbreak.SearchActivity
 import com.ianluong.newsbreak.database.Story
 import java.util.*
 
-private const val DIALOG_STORY_ADD = "DialogStoryADD"
+private const val DIALOG_STORY_ADD = "DialogStoryAdd"
 private const val REQUEST_ADD_STORY = 1
 
 class FollowingFragment : Fragment() {
@@ -61,6 +58,8 @@ class FollowingFragment : Fragment() {
             StoryAddFragment().apply {
                 show(this@FollowingFragment.childFragmentManager, DIALOG_STORY_ADD)
             }
+            //TODO Remove Add Story Functionality
+            Toast.makeText(context, "PLACEHOLDER: ADDED STORY", Toast.LENGTH_SHORT).show()
             true
         } else {
             super.onOptionsItemSelected(item)
@@ -84,12 +83,10 @@ class FollowingFragment : Fragment() {
 
             this.story = story
             storyTitle.text = story.title
-            storyTitle.setTypeface(null, Typeface.BOLD)
 
             moreButton.setOnClickListener {
                 val intent = Intent(context, FollowedStoryActivity::class.java)
-                intent.putExtra("STORY_ID", story.id.toString())
-                intent.putExtra("STORY_TITLE", story.title)
+                intent.putExtra("STORY", this.story)
                 startActivity(intent)
             }
         }
