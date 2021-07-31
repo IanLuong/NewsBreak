@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/new_stories_image"
+        android:id="@+id/article_image"
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:contentDescription="@string/article_image"
@@ -20,30 +20,30 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/new_stories_description"
+            android:id="@+id/article_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_article_description"
-            app:layout_constraintBottom_toTopOf="@id/new_stories_follow_button"
+            app:layout_constraintBottom_toTopOf="@id/article_read_more_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/new_stories_title" />
+            app:layout_constraintTop_toBottomOf="@id/article_title" />
 
         <ImageButton
-            android:id="@+id/new_stories_follow_button"
+            android:id="@+id/article_follow_button"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@color/white"
+            android:background="@null"
             android:contentDescription="@string/follow_button"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/new_stories_read_more_button"
+            app:layout_constraintEnd_toStartOf="@+id/article_read_more_button"
             app:srcCompat="@drawable/ic_favorite_foreground" />
 
         <ImageButton
-            android:id="@+id/new_stories_read_more_button"
+            android:id="@+id/article_read_more_button"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@color/white"
+            android:background="@null"
             android:contentDescription="@string/open_in_browser_button"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,16 +51,16 @@
             app:srcCompat="@drawable/ic_open_with_browser_foreground" />
 
         <TextView
-            android:id="@+id/new_stories_title"
+            android:id="@+id/article_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/list_item_article_title"
-            app:layout_constraintBottom_toTopOf="@+id/new_stories_description"
+            app:layout_constraintBottom_toTopOf="@+id/article_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/new_stories_date"
+            android:id="@+id/article_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
