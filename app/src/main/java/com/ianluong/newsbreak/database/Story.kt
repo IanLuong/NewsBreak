@@ -5,10 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.ianluong.newsbreak.api.Article
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class Story {
+class Story: Serializable {
     @PrimaryKey var id: UUID = UUID.randomUUID()
     var title: String? = null
 }

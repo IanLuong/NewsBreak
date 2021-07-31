@@ -2,10 +2,11 @@ package com.ianluong.newsbreak.api
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class Article {
+class Article: Serializable {
     @PrimaryKey
     var id: UUID = UUID.randomUUID()
     var title: String? = null

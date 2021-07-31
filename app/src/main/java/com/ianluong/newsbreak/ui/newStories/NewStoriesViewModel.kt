@@ -9,6 +9,7 @@ import com.ianluong.newsbreak.NewsFetcher
 import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
+import com.ianluong.newsbreak.database.Story
 
 class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) {
 
@@ -46,5 +47,16 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
 
     fun insertArticle(article: Article) {
         storyRepository.insertArticle(article)
+    }
+
+    fun insertStory(story: Story) {
+        storyRepository.insertStory(story)
+    }
+
+    fun addStoryAndArticleFromDialog(article: Article, story: Story) {
+        article.storyID = story.id
+        insertArticle(article)
+        insertStory(story)
+
     }
 }

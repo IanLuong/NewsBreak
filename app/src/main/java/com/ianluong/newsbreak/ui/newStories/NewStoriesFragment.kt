@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -20,7 +21,7 @@ private const val TAG = "NewStoriesFragment"
 private const val DIALOG_STORY_PICKER = "DialogStoryPicker"
 private const val REQUEST_STORY = 0 //A constant used for the dialog request code
 
-class NewStoriesFragment : Fragment() {
+class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
 
     private lateinit var newStoriesViewModel: NewStoriesViewModel
     private lateinit var articleRecyclerView: RecyclerView
@@ -94,6 +95,11 @@ class NewStoriesFragment : Fragment() {
         }
     }
 
+    override fun onStorySelected(article: Article, story: Story) {
+        newStoriesViewModel.addStoryAndArticleFromDialog(article, story)
+        Toast.makeText(context, "Story added", Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         fun newInstance(): NewStoriesFragment {
             return NewStoriesFragment()
@@ -138,12 +144,10 @@ class NewStoriesFragment : Fragment() {
 
         private fun setFollowButtonListener(button: ImageButton, article: Article) {
             button.setOnClickListener {
-                article.storyID = UUID.fromString("4b5fcb60-f0fa-4928-8f4a-d0da75d489c4")
-                //newStoriesViewModel.insertArticle(article)
                 button.isPressed = true
-                //Toast.makeText(context, "Article added", Toast.LENGTH_SHORT).show()
-                StoryPickerFragment().apply {
-                    show(this@NewStoriesFragment.childFragmentManager, DIALOG_STORY_PICKER)
+                StoryPickerFragment.newInstance(article).apply {
+                    setTargetFragment(this@NewStoriesFragment, REQUEST_STORY)
+                    show(this@NewStoriesFragment.requireFragmentManager(), DIALOG_STORY_PICKER)
                 }
             }
         }
@@ -180,6 +184,8 @@ class NewStoriesFragment : Fragment() {
 
 
     }
+
+
 }
 
 
