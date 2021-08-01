@@ -15,9 +15,6 @@ import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.database.Story
 import java.util.*
 
-private const val DIALOG_STORY_ADD = "DialogStoryAdd"
-private const val REQUEST_ADD_STORY = 1
-
 class FollowingFragment : Fragment() {
 
     private lateinit var followingViewModel: FollowingViewModel
@@ -43,27 +40,6 @@ class FollowingFragment : Fragment() {
         followingViewModel.storiesLiveData.observe(viewLifecycleOwner, { stories ->
             followingRecyclerView.adapter = FollowingAdapter(stories)
         })
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_following, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if(item.itemId == R.id.menu_item_add_story) {
-            Toast.makeText(context, "PLACEHOLDER: MADE A STORY", Toast.LENGTH_SHORT).show()
-            StoryAddFragment().apply {
-                show(this@FollowingFragment.childFragmentManager, DIALOG_STORY_ADD)
-            }
-            //TODO Remove Add Story Functionality
-            Toast.makeText(context, "PLACEHOLDER: ADDED STORY", Toast.LENGTH_SHORT).show()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
     }
 
     companion object {
@@ -103,6 +79,7 @@ class FollowingFragment : Fragment() {
         override fun onBindViewHolder(holder: FollowingHolder, position: Int) {
             val story = stories[position]
             holder.bind(story)
+
         }
 
         override fun getItemCount(): Int {

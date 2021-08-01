@@ -11,23 +11,22 @@ import com.ianluong.newsbreak.database.Story
 
 private const val ARG_ARTICLE = "article"
 
-//TODO Rename StoryPickerFragment to something more descriptive
-class StoryPickerFragment: DialogFragment() {
+class StoryAddFragment: DialogFragment() {
 
     companion object {
-        fun newInstance(article: Article): StoryPickerFragment {
+        fun newInstance(article: Article): StoryAddFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_ARTICLE, article)
             }
 
-            return StoryPickerFragment().apply {
+            return StoryAddFragment().apply {
                 arguments = args
             }
         }
     }
     
     interface Callbacks {
-        fun onStorySelected(article: Article, story: Story)
+        fun onStoryAdded(article: Article, story: Story)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -46,7 +45,7 @@ class StoryPickerFragment: DialogFragment() {
                 title = editText.text.toString()
             } //TODO Replace deprecated functions
             targetFragment?.let {fragment ->
-                (fragment as Callbacks).onStorySelected(article, story)
+                (fragment as Callbacks).onStoryAdded(article, story)
             }
         }
         builder.setNegativeButton("Cancel") {_,_ -> }

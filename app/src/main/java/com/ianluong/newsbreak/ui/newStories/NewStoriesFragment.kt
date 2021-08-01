@@ -17,11 +17,11 @@ import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
 
-private const val TAG = "NewStoriesFragment"
-private const val DIALOG_STORY_PICKER = "DialogStoryPicker"
-private const val REQUEST_STORY = 0 //A constant used for the dialog request code
+//private const val TAG = "NewStoriesFragment"
+private const val DIALOG_STORY_ADD = "DialogStoryAdd"
+private const val REQUEST_STORY_ADD = 0 //A constant used for the dialog request code
 
-class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
+class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
 
     private lateinit var newStoriesViewModel: NewStoriesViewModel
     private lateinit var articleRecyclerView: RecyclerView
@@ -70,18 +70,17 @@ class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     newStoriesViewModel.fetchSearch(query)
                     searchView.onActionViewCollapsed()
-
                     if (articleRecyclerView.adapter?.itemCount == 0) {
                         Toast.makeText(context, "Sorry, no articles were found", Toast.LENGTH_SHORT)
                             .show()
                     }
-
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return false
                 }
+
             })
 
             setOnSearchClickListener {
@@ -96,15 +95,9 @@ class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
         }
     }
 
-    override fun onStorySelected(article: Article, story: Story) {
+    override fun onStoryAdded(article: Article, story: Story) {
         newStoriesViewModel.addStoryAndArticleFromDialog(article, story)
-        Toast.makeText(context, "Story added", Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        fun newInstance(): NewStoriesFragment {
-            return NewStoriesFragment()
-        }
+        Toast.makeText(context, "${story.title} story added", Toast.LENGTH_SHORT).show()
     }
 
     private inner class NewStoryHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -146,9 +139,9 @@ class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
         private fun setFollowButtonListener(button: ImageButton, article: Article) {
             button.setOnClickListener {
                 button.isPressed = true
-                StoryPickerFragment.newInstance(article).apply {
-                    setTargetFragment(this@NewStoriesFragment, REQUEST_STORY)
-                    show(this@NewStoriesFragment.requireFragmentManager(), DIALOG_STORY_PICKER)
+                StoryAddFragment.newInstance(article).apply {
+                    setTargetFragment(this@NewStoriesFragment, REQUEST_STORY_ADD)
+                    show(this@NewStoriesFragment.requireFragmentManager(), DIALOG_STORY_ADD)
                 }
             }
         }
@@ -169,8 +162,10 @@ class NewStoriesFragment : Fragment(), StoryPickerFragment.Callbacks {
 
     private inner class NewStoryAdapter(var articles: List<Article>) :
         RecyclerView.Adapter<NewStoryHolder>() {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewStoryHolder {
             val view = layoutInflater.inflate(R.layout.list_item_article, parent, false)
+
             return NewStoryHolder(view)
         }
 
