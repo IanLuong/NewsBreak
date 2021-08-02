@@ -1,9 +1,11 @@
 package com.ianluong.newsbreak.database
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.ianluong.newsbreak.api.Article
 import java.util.*
 
-class ArticleTypeConverters {
+class StoryTypeConverters {
 
     @TypeConverter
     fun fromDate(date: Date?): Long? {
@@ -18,12 +20,12 @@ class ArticleTypeConverters {
     }
 
     @TypeConverter
-    fun fromUUID(id: UUID?): String? {
-        return id?.toString()
+    fun toUUID(id: String?): UUID? {
+        return UUID.fromString(id)
     }
 
     @TypeConverter
-    fun toUUID(id: String?): UUID? {
-        return UUID.fromString(id)
+    fun fromUUID(id: UUID?): String? {
+        return id?.toString()
     }
 }

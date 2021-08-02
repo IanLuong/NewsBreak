@@ -1,16 +1,22 @@
 package com.ianluong.newsbreak.ui.following
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.ianluong.newsbreak.ArticleRepository
-import com.ianluong.newsbreak.NewsFetcher
+import androidx.lifecycle.Transformations
+import com.ianluong.newsbreak.StoryRepository
+import com.ianluong.newsbreak.database.Story
+import java.util.*
 
-class FollowingViewModel : ViewModel() {
+class FollowingViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val articleDatabase = ArticleRepository.get()
+    private val storyRepository = StoryRepository.get()
 
-    //TODO Take data from database
-    val articles = NewsFetcher().searchUKHeadlines()//articleDatabase.getArticles()
+    val storiesLiveData: LiveData<List<Story>> = storyRepository.getStories()
 
+    fun updateStory() {
+        storyRepository.updateStory(Story())
+    }
 }
