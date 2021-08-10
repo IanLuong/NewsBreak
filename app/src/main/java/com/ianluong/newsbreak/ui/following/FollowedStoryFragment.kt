@@ -107,8 +107,7 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
             this.article = article
 
-            articleTitle.text =
-                getString(R.string.article_title_text, article.title, article.author)
+            articleTitle.text = article.title
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()
