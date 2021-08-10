@@ -18,7 +18,7 @@ class StoryRepository private constructor(context: Context) {
     private val database : StoryDatabase = Room.databaseBuilder(
         context.applicationContext,
         StoryDatabase::class.java,
-        DATABASE_NAME).build()
+        DATABASE_NAME).fallbackToDestructiveMigration().build()
 
     private val storyDao = database.storyDao()
     private val executor = Executors.newSingleThreadExecutor()

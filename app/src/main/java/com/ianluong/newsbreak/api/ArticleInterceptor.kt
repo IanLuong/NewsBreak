@@ -14,7 +14,6 @@ class ArticleInterceptor : Interceptor {
 
         val newUrl: HttpUrl = originalRequest.url().newBuilder()
             //TODO Fix Sources url intercept
-            //.addQueryParameter("sources", "bbc-news")
             .addQueryParameter("apiKey", API_KEY)
             .build()
 

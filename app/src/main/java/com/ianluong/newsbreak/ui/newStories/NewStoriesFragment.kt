@@ -4,8 +4,10 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,6 +58,24 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
             articleSwipeRefreshLayout.isRefreshing = false
             Toast.makeText(context, "Refreshed latest articles", Toast.LENGTH_SHORT).show()
         }
+
+        articleRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(context, "Reached the bottom", Toast.LENGTH_SHORT).show()
+                    //TODO Implement recyclerview update on bottom reached
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                //TODO Improve handling of searches returning no articles
+                if (articleRecyclerView.isEmpty()) {
+                    Toast.makeText(context, "Sorry, no articles to show", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -70,10 +90,7 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     newStoriesViewModel.fetchSearch(query)
                     searchView.onActionViewCollapsed()
-                    if (articleRecyclerView.adapter?.itemCount == 0) {
-                        Toast.makeText(context, "Sorry, no articles were found", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+
                     return true
                 }
 
@@ -118,8 +135,7 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
 
             this.article = article
 
-            articleTitle.text =
-                getString(R.string.article_title_text, article.title, article.author)
+            articleTitle.text = article.title
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()

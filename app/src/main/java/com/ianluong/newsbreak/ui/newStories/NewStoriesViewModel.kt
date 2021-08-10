@@ -10,6 +10,7 @@ import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
 import com.ianluong.newsbreak.database.Story
+import java.util.*
 
 class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) {
 
@@ -54,9 +55,9 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
     }
 
     fun addStoryAndArticleFromDialog(article: Article, story: Story) {
+        article.id = UUID.randomUUID()
         article.storyID = story.id
         insertArticle(article)
         insertStory(story)
-
     }
 }
