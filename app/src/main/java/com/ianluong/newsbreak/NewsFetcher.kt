@@ -36,15 +36,23 @@ class NewsFetcher {
         newsApi = retrofit.create(NewsApi::class.java)
     }
 
+    fun searchUKHeadlinesRequest(): Call<NewsResult> {
+        return newsApi.fetchUKHeadlines()
+    }
+
     fun searchUKHeadlines(): LiveData<List<Article>> {
-        return fetchNews(newsApi.fetchBBCHeadlines())
+        return fetchNews(searchUKHeadlinesRequest())
+    }
+
+    fun searchNewsQueryRequest(query: String): Call<NewsResult> {
+        return newsApi.fetchSearch(query)
     }
 
     fun searchNewsQuery(query: String): LiveData<List<Article>> {
-        return fetchNews(newsApi.fetchSearch(query))
+        return fetchNews(searchNewsQueryRequest(query))
     }
 
-    fun fetchNews(newsRequest: Call<NewsResult>) : LiveData<List<Article>> {
+    private fun fetchNews(newsRequest: Call<NewsResult>) : LiveData<List<Article>> {
         val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
 
         newsRequest.enqueue(object: Callback<NewsResult> {

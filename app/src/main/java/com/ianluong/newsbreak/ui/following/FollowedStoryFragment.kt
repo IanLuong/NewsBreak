@@ -14,11 +14,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import com.ianluong.newsbreak.PollWorker
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 private const val ARG_STORY = "story"
 private const val DIALOG_STORY_DELETE = "DialogStoryDelete"
@@ -26,6 +32,10 @@ private const val REQUEST_DELETE_STORY = 2
 
 
 class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
+
+    private lateinit var followedStoryViewModel: FollowedStoryViewModel
+    private lateinit var articleRecyclerView: RecyclerView
+    private lateinit var story: Story
 
     companion object {
         fun newInstance(story: Story): FollowedStoryFragment {
@@ -37,10 +47,6 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
             }
         }
     }
-
-    private lateinit var followedStoryViewModel: FollowedStoryViewModel
-    private lateinit var articleRecyclerView: RecyclerView
-    private lateinit var story: Story
 
     override fun onStoryDeleted(story: Story) {
         followedStoryViewModel.deleteStoryAndArticles(story)
@@ -61,6 +67,14 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
         articleRecyclerView = root.findViewById(R.id.followed_story_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED).build()
+        val workRequest = PeriodicWorkRequest.Builder(
+            PollWorker::class.java,
+            15,
+            TimeUnit.MINUTES).setConstraints(constraints).build()
+        WorkManager.getInstance().enqueue(workRequest)
+
         return root
     }
 
@@ -79,7 +93,7 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //TODO Replace deprecated functions
-        return if(item.itemId == R.id.menu_item_delete_story) {
+        return if (item.itemId == R.id.menu_item_delete_story) {
             StoryDeleteFragment.newInstance(story).apply {
                 setTargetFragment(this@FollowedStoryFragment, REQUEST_DELETE_STORY)
                 show(this@FollowedStoryFragment.requireFragmentManager(), DIALOG_STORY_DELETE)
