@@ -8,6 +8,7 @@ import com.ianluong.newsbreak.api.ArticleInterceptor
 import com.ianluong.newsbreak.api.NewsApi
 import com.ianluong.newsbreak.api.NewsResult
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,9 +37,15 @@ class NewsFetcher {
     }
 
     fun searchUKHeadlines(): LiveData<List<Article>> {
-        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
+        return fetchNews(newsApi.fetchBBCHeadlines())
+    }
 
-        val newsRequest: Call<NewsResult> =  newsApi.fetchUKHeadlines()  //UKHeadlines is the default on startup
+    fun searchNewsQuery(query: String): LiveData<List<Article>> {
+        return fetchNews(newsApi.fetchSearch(query))
+    }
+
+    fun fetchNews(newsRequest: Call<NewsResult>) : LiveData<List<Article>> {
+        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
 
         newsRequest.enqueue(object: Callback<NewsResult> {
             override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
@@ -58,26 +65,4 @@ class NewsFetcher {
         return responseLiveData
     }
 
-    fun searchNews(query: String): LiveData<List<Article>> {
-        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
-
-        val newsRequest: Call<NewsResult> = newsApi.fetchSearch(query)
-
-        newsRequest.enqueue(object: Callback<NewsResult> {
-            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
-                Log.d(TAG, "RESPONSE RECEIVED")
-                val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
-
-                responseLiveData.value = articleResponse
-            }
-
-            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
-                Log.e(TAG, "ERROR FETCHING NEWS", t)
-            }
-
-        })
-
-        return responseLiveData
-    }
 }

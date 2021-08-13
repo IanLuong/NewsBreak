@@ -30,7 +30,7 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
                 if (it.isBlank()) {
                     newsFetcher.searchUKHeadlines()
                 } else {
-                    newsFetcher.searchNews(it)
+                    newsFetcher.searchNewsQuery(it)
                 }
             }
 
