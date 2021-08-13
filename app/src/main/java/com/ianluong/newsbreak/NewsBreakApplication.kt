@@ -4,7 +4,6 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import com.ianluong.newsbreak.api.QueryPreferences
 
 class NewsBreakApplication: Application() {
@@ -15,18 +14,16 @@ class NewsBreakApplication: Application() {
         //This resets current query back to default search on app start
         QueryPreferences.setQuery("", this)
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channels = buildChannels()
-            val notificationManager: NotificationManager =
-                getSystemService(NotificationManager::class.java)
-            if (channels.isNotEmpty()) {
-                notificationManager.createNotificationChannels(channels)
-            }
-            notificationManager.deleteNotificationChannel("news_poll")
+        val channels = buildChannels()
+        val notificationManager: NotificationManager =
+            getSystemService(NotificationManager::class.java)
+        if (channels.isNotEmpty()) {
+            notificationManager.createNotificationChannels(channels)
         }
+        deleteOldChannels(notificationManager)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //TODO Move Channel creation to somewhere after adding a story, rather than when app reopened
     private fun buildChannels(): List<NotificationChannel> {
         val stories = StoryRepository.get().getStoriesSync()
         val channels = mutableListOf<NotificationChannel>()
@@ -42,4 +39,16 @@ class NewsBreakApplication: Application() {
         }
         return channels
     }
+
+    private fun deleteOldChannels(notificationManager: NotificationManager) {
+        val stories = StoryRepository.get().getStoriesSync()
+        val storyIDs = stories.map{it.id.toString()}
+        val currentChannels = notificationManager.notificationChannels
+        for(channel in currentChannels) {
+            if(channel.id !in storyIDs) {
+                notificationManager.deleteNotificationChannel(channel.id)
+            }
+        }
+    }
+
 }
