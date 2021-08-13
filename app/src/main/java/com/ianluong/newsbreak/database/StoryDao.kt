@@ -10,6 +10,9 @@ interface StoryDao {
     @Query("SELECT * FROM story")
     fun getStories(): LiveData<List<Story>>
 
+    @Query("SELECT * FROM story")
+    fun getStoriesSync(): List<Story>
+
     @Query("SELECT * FROM story WHERE id=(:id)")
     fun getStory(id: UUID): LiveData<Story?>
 

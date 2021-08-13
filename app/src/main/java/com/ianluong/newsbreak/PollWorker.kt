@@ -19,8 +19,8 @@ class PollWorker(val context: Context, workerParams: WorkerParameters)
         Log.i(TAG, "Work request triggered")
         val items: List<Article> = NewsFetcher().searchUKHeadlinesRequest().execute().body()?.articles!!
         for (article in items) {
-            if ((article.title + article.description).contains("Widow")) {
-                article.storyID = UUID.fromString("f69c7ac6-7a0e-4a4f-afca-dbe2258e5f35")
+         if ((article.title + article.description).contains("Widow")) {
+                article.storyID = UUID.fromString("1020c7e8-dd58-48d0-9824-cc7c9031f3e2")
                 storyRepository.insertArticle(article)
             }
         }

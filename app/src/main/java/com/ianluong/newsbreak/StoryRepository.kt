@@ -9,6 +9,7 @@ import com.ianluong.newsbreak.database.StoryDatabase
 import com.ianluong.newsbreak.database.StoryWithArticles
 import java.lang.IllegalStateException
 import java.util.*
+import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "story-database"
@@ -25,6 +26,13 @@ class StoryRepository private constructor(context: Context) {
 
     fun getStories(): LiveData<List<Story>> = storyDao.getStories()
 
+    //Used to update the notification channels on startup
+    fun getStoriesSync(): List<Story> {
+        val callable = Callable {storyDao.getStoriesSync()}
+        val reply = executor.submit(callable)
+        return reply.get()
+    }
+
     fun getStory(id: UUID): LiveData<Story?> = storyDao.getStory(id)
 
     fun getStoriesWithArticles(): LiveData<List<StoryWithArticles>> = storyDao.getStoriesWithArticles()
@@ -34,13 +42,13 @@ class StoryRepository private constructor(context: Context) {
     fun getArticlesWithStoryID(storyID: UUID): LiveData<List<Article>> = storyDao.getArticlesWithStoryID(storyID)
 
     fun updateStory(story: Story) {
-        executor.execute() {
+        executor.execute {
             storyDao.updateStory(story)
         }
     }
 
     fun insertStory(story: Story) {
-        executor.execute() {
+        executor.execute {
             storyDao.insertStory(story)
         }
     }
