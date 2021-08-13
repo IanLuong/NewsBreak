@@ -1,5 +1,7 @@
 package com.ianluong.newsbreak
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -24,5 +26,11 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, FollowedStoryActivity::class.java)
+        }
     }
 }

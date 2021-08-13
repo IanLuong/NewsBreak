@@ -4,7 +4,9 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import androidx.work.*
 import com.ianluong.newsbreak.api.QueryPreferences
+import java.util.concurrent.TimeUnit
 
 class NewsBreakApplication: Application() {
     override fun onCreate() {
@@ -21,6 +23,20 @@ class NewsBreakApplication: Application() {
             notificationManager.createNotificationChannels(channels)
         }
         deleteOldChannels(notificationManager)
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED).build()
+
+        val workRequest = PeriodicWorkRequest.Builder(
+            PollWorker::class.java,
+            15,
+            TimeUnit.MINUTES).setConstraints(constraints).build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork("updateStories",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest)
+        //WorkManager.getInstance().cancelAllWork()
     }
 
     //TODO Move Channel creation to somewhere after adding a story, rather than when app reopened

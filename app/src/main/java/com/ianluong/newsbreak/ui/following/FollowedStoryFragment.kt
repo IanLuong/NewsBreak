@@ -67,14 +67,6 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
         articleRecyclerView = root.findViewById(R.id.followed_story_recycler_view)
         articleRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED).build()
-        val workRequest = PeriodicWorkRequest.Builder(
-            PollWorker::class.java,
-            15,
-            TimeUnit.MINUTES).setConstraints(constraints).build()
-        WorkManager.getInstance().enqueue(workRequest)
-
         return root
     }
 

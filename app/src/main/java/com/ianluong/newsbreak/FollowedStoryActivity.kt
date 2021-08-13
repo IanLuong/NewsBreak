@@ -1,8 +1,6 @@
 package com.ianluong.newsbreak
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ianluong.newsbreak.database.Story
 import com.ianluong.newsbreak.ui.following.FollowedStoryFragment
@@ -21,6 +19,4 @@ class FollowedStoryActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().add(R.id.followed_story_fragment_container, fragment).commit()
         }
     }
-
-
 }
