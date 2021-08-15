@@ -3,12 +3,12 @@ package com.ianluong.newsbreak
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ianluong.newsbreak.api.Article
+import java.util.*
 
 private const val TAG = "PollWorker"
 
@@ -28,9 +28,10 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
             var storyUpdated = false
             for (article in items) {
                 if ((article.title + article.description).contains(stories[i].title!!)) {
-                    article.storyID = stories[i].id
-                    storyRepository.insertArticle(article)
-                    if (!storyUpdated) storyUpdated = true
+                    article.articleId = UUID.nameUUIDFromBytes(article.title?.toByteArray())
+                    val id = storyRepository.insertArticle(article)
+                    storyRepository.insertStoryArticleCrossRef(article, stories[i])
+                    if (id != (-1).toLong()) storyUpdated = true
                 }
             }
 
@@ -39,7 +40,7 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
                 val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
                 val notification =
-                    NotificationCompat.Builder(context, stories[i].id.toString())
+                    NotificationCompat.Builder(context, stories[i].storyId.toString())
                         .setTicker("New articles added to story ${stories[i].title}")
                         .setSmallIcon(R.drawable.ic_story_update)
                         .setContentTitle("Story ${stories[i].title} updated").setContentText("Tap to view")

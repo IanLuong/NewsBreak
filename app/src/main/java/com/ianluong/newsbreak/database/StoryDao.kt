@@ -7,47 +7,61 @@ import java.util.*
 
 @Dao
 interface StoryDao {
+    @Query("SELECT * FROM story WHERE storyId=(:storyId)")
+    fun getStory(storyId: UUID): LiveData<Story?>
     @Query("SELECT * FROM story")
     fun getStories(): LiveData<List<Story>>
-
     @Query("SELECT * FROM story")
     fun getStoriesSync(): List<Story>
 
-    @Query("SELECT * FROM story WHERE id=(:id)")
-    fun getStory(id: UUID): LiveData<Story?>
-
     @Query("SELECT * FROM article")
     fun getArticles(): LiveData<List<Article>>
+    @Query("SELECT * FROM article WHERE articleId=(:articleId)")
+    fun getArticle(articleId: UUID): LiveData<Article?>
 
-    @Query("SELECT * FROM article WHERE id=(:id)")
-    fun getArticle(id: UUID): LiveData<Article?>
-
-    @Query("SELECT * FROM article WHERE storyID=(:storyID)")
-    fun getArticlesWithStoryID(storyID: UUID): LiveData<List<Article>>
-
-    @Transaction
-    @Query("SELECT * FROM story")
-    fun getStoriesWithArticles(): LiveData<List<StoryWithArticles>>
-
-    @Transaction
-    @Query("SELECT * FROM story WHERE id=(:id)")
-    fun getStoryWithArticles(id: UUID): LiveData<StoryWithArticles>
 
     @Update
     fun updateStory(story: Story)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertStory(story: Story)
 
-    @Query("DELETE FROM story WHERE id=(:id)")
-    fun deleteStory(id: UUID)
+    @Query("DELETE FROM story WHERE storyId=(:storyId)")
+    fun deleteStory(storyId: UUID)
 
-    @Query("DELETE FROM article WHERE storyID=(:storyID)")
-    fun deleteArticles(storyID: UUID)
 
     @Update
     fun updateArticle(article: Article)
 
-    @Insert
-    fun insertArticle(article: Article)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertArticle(article: Article): Long
+
+    @Transaction
+    @Query("SELECT * FROM Story")
+    fun getStoriesWithArticles(): LiveData<List<StoryWithArticles>>
+
+    @Transaction
+    @Query("SELECT * FROM Article")
+    fun getArticlesWithStories(): List<ArticleWithStories>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertSoryArticleCrossRef(storyArticleCrossRef: StoryArticleCrossRef)
+
+    //TODO Change delete to work with many-to-many
+    @Transaction
+    @Query("DELETE FROM storyarticlecrossref WHERE storyId=(:storyId); ")
+    fun deleteStoryWithArticles(storyId: UUID)
+
+    //TODO Change delete to work with many-to-many
+    @Query("DELETE FROM article WHERE articleId NOT IN " +
+            "(SELECT f.articleId FROM storyarticlecrossref f)")
+    fun deleteArticles()
+
+    @Transaction
+    @Query("SELECT * FROM Story WHERE storyId =(:storyId)")
+    fun getStoryWithArticles(storyId: UUID): StoryWithArticles
+
+    @Transaction
+    @Query("SELECT * FROM Article WHERE articleId =(:articleId)")
+    fun getArticleWithStories(articleId: UUID): List<ArticleWithStories>
 }

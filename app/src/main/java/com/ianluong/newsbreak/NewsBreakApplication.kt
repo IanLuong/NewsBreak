@@ -3,7 +3,6 @@ package com.ianluong.newsbreak
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.os.Build
 import androidx.work.*
 import com.ianluong.newsbreak.api.QueryPreferences
 import java.util.concurrent.TimeUnit
@@ -47,7 +46,7 @@ class NewsBreakApplication: Application() {
 
         if(stories.isNotEmpty()) {
             for (element in stories) {
-                val channel = NotificationChannel(element.id.toString(),
+                val channel = NotificationChannel(element.storyId.toString(),
                     "${element.title} Stories",
                     importance)
                 channels.add(channel)
@@ -58,7 +57,7 @@ class NewsBreakApplication: Application() {
 
     private fun deleteOldChannels(notificationManager: NotificationManager) {
         val stories = StoryRepository.get().getStoriesSync()
-        val storyIDs = stories.map{it.id.toString()}
+        val storyIDs = stories.map{it.storyId.toString()}
         val currentChannels = notificationManager.notificationChannels
         for(channel in currentChannels) {
             if(channel.id !in storyIDs) {

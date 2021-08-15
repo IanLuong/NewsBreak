@@ -8,15 +8,12 @@ import java.util.*
 @Entity
 class Article: Serializable {
     @PrimaryKey
-    var id: UUID = UUID.randomUUID()
+    var articleId: UUID = UUID.randomUUID()
     var title: String? = null
     var description: String? = null
     var url: String? = null
     var urlToImage: String? = null
     var publishedAt: Date? = null
     var author: String? = null
-
-    var storyID: UUID? = null
-
 }
 

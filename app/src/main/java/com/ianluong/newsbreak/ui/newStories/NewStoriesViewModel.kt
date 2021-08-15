@@ -54,10 +54,14 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
         storyRepository.insertStory(story)
     }
 
+    fun insertStoryArticleCrossRef(article: Article, story: Story) {
+        storyRepository.insertStoryArticleCrossRef(article, story)
+    }
+
     fun addStoryAndArticleFromDialog(article: Article, story: Story) {
-        article.id = UUID.randomUUID()
-        article.storyID = story.id
+        article.articleId = UUID.nameUUIDFromBytes(article.title?.toByteArray())
         insertArticle(article)
         insertStory(story)
+        insertStoryArticleCrossRef(article, story)
     }
 }

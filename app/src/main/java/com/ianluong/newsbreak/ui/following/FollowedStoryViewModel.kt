@@ -8,7 +8,6 @@ import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.api.QueryPreferences
 import com.ianluong.newsbreak.database.Story
 import com.ianluong.newsbreak.database.StoryDatabase
-import com.ianluong.newsbreak.database.StoryWithArticles
 import java.util.*
 
 class FollowedStoryViewModel(): ViewModel() {
@@ -18,11 +17,11 @@ class FollowedStoryViewModel(): ViewModel() {
 
     var articlesLiveData: LiveData<List<Article>> =
         Transformations.switchMap(storyIDLiveData) {
-            storyRepository.getArticlesWithStoryID(storyIDLiveData.value!!)
+            storyRepository.getStoryWithArticles(storyIDLiveData.value!!)
         }
 
     fun loadArticles(story: Story) {
-        storyIDLiveData.value = story.id
+        storyIDLiveData.value = story.storyId
     }
 
     fun deleteStoryAndArticles(story: Story) {
