@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsBreak">
         <activity
-            android:name=".HomeActivity"
+            android:name=".MainActivity"
             android:label="NewsBreak"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -23,14 +23,14 @@
         </activity>
 
         <activity android:name=".FollowedStoryActivity"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".SearchActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".MainActivity">
         </activity>
 
     </application>

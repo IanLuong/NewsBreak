@@ -30,7 +30,7 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
                 if (it.isBlank()) {
                     newsFetcher.searchUKHeadlines()
                 } else {
-                    newsFetcher.searchNews(it)
+                    newsFetcher.searchNewsQuery(it)
                 }
             }
 
@@ -46,18 +46,10 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
         mutableSearchTerm.value = ""
     }
 
-    fun insertArticle(article: Article) {
-        storyRepository.insertArticle(article)
-    }
-
-    fun insertStory(story: Story) {
-        storyRepository.insertStory(story)
-    }
-
     fun addStoryAndArticleFromDialog(article: Article, story: Story) {
-        article.id = UUID.randomUUID()
-        article.storyID = story.id
-        insertArticle(article)
-        insertStory(story)
+        article.articleId = UUID.nameUUIDFromBytes(article.title?.toByteArray())
+        storyRepository.insertArticle(article)
+        storyRepository.insertStory(story)
+        storyRepository.insertStoryArticleCrossRef(article, story)
     }
 }
