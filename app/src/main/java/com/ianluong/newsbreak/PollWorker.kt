@@ -36,8 +36,9 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
             }
 
             if (storyUpdated) {
-                val intent = MainActivity.newIntent(context)
-                val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+                val intent = FollowedStoryActivity.newIntent(context)
+                intent.putExtra("STORY", stories[i])
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
                 val notification =
                     NotificationCompat.Builder(context, stories[i].storyId.toString())

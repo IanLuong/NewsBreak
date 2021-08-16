@@ -46,22 +46,10 @@ class NewStoriesViewModel(private val app: Application) : AndroidViewModel(app) 
         mutableSearchTerm.value = ""
     }
 
-    fun insertArticle(article: Article) {
-        storyRepository.insertArticle(article)
-    }
-
-    fun insertStory(story: Story) {
-        storyRepository.insertStory(story)
-    }
-
-    fun insertStoryArticleCrossRef(article: Article, story: Story) {
-        storyRepository.insertStoryArticleCrossRef(article, story)
-    }
-
     fun addStoryAndArticleFromDialog(article: Article, story: Story) {
         article.articleId = UUID.nameUUIDFromBytes(article.title?.toByteArray())
-        insertArticle(article)
-        insertStory(story)
-        insertStoryArticleCrossRef(article, story)
+        storyRepository.insertArticle(article)
+        storyRepository.insertStory(story)
+        storyRepository.insertStoryArticleCrossRef(article, story)
     }
 }
