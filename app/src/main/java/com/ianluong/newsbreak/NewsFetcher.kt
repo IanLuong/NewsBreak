@@ -57,7 +57,8 @@ class NewsFetcher {
             override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
                 Log.d(TAG, "RESPONSE RECEIVED")
                 val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
+                val articleResponse = newsResponse?.articles?.toMutableList()
+                articleResponse?.sortByDescending{ it.publishedAt }
 
                 responseLiveData.value = articleResponse
             }

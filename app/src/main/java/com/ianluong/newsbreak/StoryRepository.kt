@@ -54,15 +54,17 @@ class StoryRepository private constructor(context: Context) {
     fun insertStoryArticleCrossRef(article: Article, story: Story) {
         executor.execute() {
             val storyArticle = StoryArticleCrossRef(story.storyId, article.articleId)
-            storyDao.insertSoryArticleCrossRef(storyArticle)
+            storyDao.insertStoryArticleCrossRef(storyArticle)
         }
     }
 
     fun getStoryWithArticles(storyId: UUID): MutableLiveData<List<Article>> {
         val callable = Callable {storyDao.getStoryWithArticles(storyId)}
-        val reply = executor.submit(callable)
+        val articles = executor.submit(callable).get().articles.toMutableList()
+        articles.sortBy{ it.publishedAt }
+
         val bob: MutableLiveData<List<Article>> by lazy {
-            MutableLiveData<List<Article>>(reply.get().articles)
+            MutableLiveData<List<Article>>(articles)
         }
         return bob
     }

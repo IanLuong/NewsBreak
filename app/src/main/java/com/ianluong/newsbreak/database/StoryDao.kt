@@ -45,7 +45,7 @@ interface StoryDao {
     fun getArticlesWithStories(): List<ArticleWithStories>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertSoryArticleCrossRef(storyArticleCrossRef: StoryArticleCrossRef)
+    fun insertStoryArticleCrossRef(storyArticleCrossRef: StoryArticleCrossRef)
 
     @Transaction
     @Query("DELETE FROM storyarticlecrossref WHERE storyId=(:storyId); ")
