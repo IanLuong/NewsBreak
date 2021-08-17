@@ -14,17 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
-import com.ianluong.newsbreak.PollWorker
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 private const val ARG_STORY = "story"
 private const val DIALOG_STORY_DELETE = "DialogStoryDelete"

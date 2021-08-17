@@ -35,10 +35,8 @@ class NewsBreakApplication: Application() {
             .enqueueUniquePeriodicWork("updateStories",
                 ExistingPeriodicWorkPolicy.KEEP,
                 workRequest)
-        //WorkManager.getInstance().cancelAllWork()
     }
 
-    //TODO Move Channel creation to somewhere after adding a story, rather than when app reopened
     private fun buildChannels(): List<NotificationChannel> {
         val stories = StoryRepository.get().getStoriesSync()
         val channels = mutableListOf<NotificationChannel>()

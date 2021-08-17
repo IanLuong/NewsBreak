@@ -42,12 +42,6 @@ class FollowingFragment : Fragment() {
         })
     }
 
-    companion object {
-        fun newInstance(): FollowingFragment {
-            return FollowingFragment()
-        }
-    }
-
     private inner class FollowingHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private lateinit var story: Story

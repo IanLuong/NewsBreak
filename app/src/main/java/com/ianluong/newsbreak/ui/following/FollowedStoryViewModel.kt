@@ -11,7 +11,6 @@ import com.ianluong.newsbreak.database.StoryDatabase
 import java.util.*
 
 class FollowedStoryViewModel(): ViewModel() {
-    // TODO: Implement the ViewModel
     private val storyRepository = StoryRepository.get()
     private val storyIDLiveData = MutableLiveData<UUID>()
 

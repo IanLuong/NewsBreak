@@ -8,13 +8,11 @@ import com.ianluong.newsbreak.api.ArticleInterceptor
 import com.ianluong.newsbreak.api.NewsApi
 import com.ianluong.newsbreak.api.NewsResult
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "NewsFetcher"
 

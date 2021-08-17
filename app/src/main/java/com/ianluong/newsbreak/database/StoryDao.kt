@@ -47,12 +47,10 @@ interface StoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSoryArticleCrossRef(storyArticleCrossRef: StoryArticleCrossRef)
 
-    //TODO Change delete to work with many-to-many
     @Transaction
     @Query("DELETE FROM storyarticlecrossref WHERE storyId=(:storyId); ")
     fun deleteStoryWithArticles(storyId: UUID)
 
-    //TODO Change delete to work with many-to-many
     @Query("DELETE FROM article WHERE articleId NOT IN " +
             "(SELECT f.articleId FROM storyarticlecrossref f)")
     fun deleteArticles()
