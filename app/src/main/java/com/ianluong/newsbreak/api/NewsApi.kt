@@ -11,7 +11,7 @@ interface NewsApi {
     @GET("v2/top-headlines?country=gb")
     fun fetchUKHeadlines(): Call<NewsResult>
 
-    @GET("v2/top-headlines")
+    @GET("v2/top-headlines&country=uk")
     fun fetchSearch(@Query("q") query: String): Call<NewsResult>
 
 }
