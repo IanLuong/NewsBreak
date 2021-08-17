@@ -19,4 +19,6 @@
     <string name="followed_story_placeholder">Your Followed Story</string>
     <string name="menu_item_add_story">Add Story</string>
     <string name="menu_item_delete_story">Delete story</string>
+    <string name="start_polling">Start Background Updates</string>
+    <string name="stop_polling">Stop Background Updates</string>
 </resources>

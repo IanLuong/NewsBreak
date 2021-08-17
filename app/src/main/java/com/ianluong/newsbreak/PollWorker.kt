@@ -21,7 +21,6 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
         //TODO Replace placeholder PollWorker background tasks
         val stories = storyRepository.getStoriesSync()
 
-
         for (i in stories.indices) {
             val items: List<Article> =
                 NewsFetcher().searchNewsQueryRequest(stories[i].title!!).execute().body()?.articles!!

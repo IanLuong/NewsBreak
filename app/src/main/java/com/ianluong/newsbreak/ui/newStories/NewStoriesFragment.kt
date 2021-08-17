@@ -20,6 +20,7 @@ import com.ianluong.newsbreak.PollWorker
 import com.ianluong.newsbreak.R
 import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.api.QueryPreferences
 import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit
 
 private const val DIALOG_STORY_ADD = "DialogStoryAdd"
 private const val REQUEST_STORY_ADD = 0 //A constant used for the dialog request code
+private const val POLL_WORK = "POLL_WORk"
 
 class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
 
@@ -130,7 +132,9 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
 
         notificationManager.createNotificationChannel(channel)
 
-        startWork(constraints)
+        val isPolling = QueryPreferences.isPolling(requireContext())
+        if(isPolling) startWork(constraints)
+
     }
 
     private fun startWork(constraints: Constraints) {
@@ -140,7 +144,8 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
             TimeUnit.MINUTES).setConstraints(constraints).build()
 
         WorkManager.getInstance()
-            .enqueueUniquePeriodicWork("updateStories",
+            .enqueueUniquePeriodicWork(
+                POLL_WORK,
                 ExistingPeriodicWorkPolicy.KEEP,
                 workRequest)
     }
