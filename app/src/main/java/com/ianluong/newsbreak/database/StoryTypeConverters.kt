@@ -1,8 +1,6 @@
 package com.ianluong.newsbreak.database
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.ianluong.newsbreak.api.Article
 import java.util.*
 
 class StoryTypeConverters {

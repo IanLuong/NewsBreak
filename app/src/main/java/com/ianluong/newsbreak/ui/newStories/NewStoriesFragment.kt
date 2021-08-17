@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.view.isEmpty
@@ -19,7 +18,6 @@ import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
 
-//private const val TAG = "NewStoriesFragment"
 private const val DIALOG_STORY_ADD = "DialogStoryAdd"
 private const val REQUEST_STORY_ADD = 0 //A constant used for the dialog request code
 
@@ -60,14 +58,9 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
         }
 
         articleRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(context, "Reached the bottom", Toast.LENGTH_SHORT).show()
-                    //TODO Implement recyclerview update on bottom reached
-                }
-            }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
                 //TODO Improve handling of searches returning no articles
                 if (articleRecyclerView.isEmpty()) {
                     Toast.makeText(context, "Sorry, no articles to show", Toast.LENGTH_SHORT)

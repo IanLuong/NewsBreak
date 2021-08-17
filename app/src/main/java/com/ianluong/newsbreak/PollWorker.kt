@@ -3,14 +3,14 @@ package com.ianluong.newsbreak
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ianluong.newsbreak.api.Article
+import com.ianluong.newsbreak.database.Story
 import java.util.*
-
-private const val TAG = "PollWorker"
 
 class PollWorker(val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
@@ -21,10 +21,11 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
         //TODO Replace placeholder PollWorker background tasks
         val stories = storyRepository.getStoriesSync()
 
-        val items: List<Article> =
-            NewsFetcher().searchUKHeadlinesRequest().execute().body()?.articles!!
 
         for (i in stories.indices) {
+            val items: List<Article> =
+                NewsFetcher().searchNewsQueryRequest(stories[i].title!!).execute().body()?.articles!!
+
             var storyUpdated = false
             for (article in items) {
                 if ((article.title + article.description).contains(stories[i].title!!)) {
@@ -36,26 +37,31 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
             }
 
             if (storyUpdated) {
-                val intent = FollowedStoryActivity.newIntent(context)
-                intent.putExtra("STORY", stories[i])
-                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-                val notification =
-                    NotificationCompat.Builder(context, stories[i].storyId.toString())
-                        .setTicker("New articles added to story ${stories[i].title}")
-                        .setSmallIcon(R.drawable.ic_story_update)
-                        .setContentTitle("Story ${stories[i].title} updated").setContentText("Tap to view")
-                        .setContentIntent(pendingIntent).setAutoCancel(true)
-                        .build()
-
-                notification.flags = Notification.FLAG_AUTO_CANCEL
-
-                val notificationManager = NotificationManagerCompat.from(context)
-                notificationManager.notify(i, notification)
+                createNotification(stories[i], i)
             }
 
 
         }
         return Result.success()
+    }
+
+    private fun createNotification(story: Story, index: Int) {
+        val intent = FollowedStoryActivity.newIntent(context)
+        intent.putExtra("STORY", story)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val notification =
+            NotificationCompat.Builder(context, story.storyId.toString())
+                .setTicker("New articles added to story ${story.title}")
+                .setSmallIcon(R.drawable.ic_story_update)
+                .setContentTitle("Story ${story.title} updated").setContentText("Tap to view")
+                .setContentIntent(pendingIntent).setAutoCancel(true)
+                .build()
+
+        notification.flags = Notification.FLAG_AUTO_CANCEL
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(index, notification)
     }
 }
