@@ -1,22 +1,29 @@
 package com.ianluong.newsbreak.ui.newStories
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.*
+import com.ianluong.newsbreak.PollWorker
 import com.ianluong.newsbreak.R
+import com.ianluong.newsbreak.StoryRepository
 import com.ianluong.newsbreak.api.Article
 import com.ianluong.newsbreak.database.Story
 import com.squareup.picasso.Picasso
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 private const val DIALOG_STORY_ADD = "DialogStoryAdd"
 private const val REQUEST_STORY_ADD = 0 //A constant used for the dialog request code
@@ -108,6 +115,34 @@ class NewStoriesFragment : Fragment(), StoryAddFragment.Callbacks {
     override fun onStoryAdded(article: Article, story: Story) {
         newStoriesViewModel.addStoryAndArticleFromDialog(article, story)
         Toast.makeText(context, "${story.title} story added", Toast.LENGTH_SHORT).show()
+        createChannel(story)
+    }
+
+    private fun createChannel(story: Story) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(story.storyId.toString(),
+                    "${story.title} Stories", importance)
+
+        val notificationManager: NotificationManager =
+            context?.getSystemService(NotificationManager::class.java)!!
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED).build()
+
+        notificationManager.createNotificationChannel(channel)
+
+        startWork(constraints)
+    }
+
+    private fun startWork(constraints: Constraints) {
+        val workRequest = PeriodicWorkRequest.Builder(
+            PollWorker::class.java,
+            15,
+            TimeUnit.MINUTES).setConstraints(constraints).build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork("updateStories",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest)
     }
 
     private inner class NewStoryHolder(view: View) : RecyclerView.ViewHolder(view) {
