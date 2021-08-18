@@ -13,7 +13,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "NewsFetcher"
 
@@ -35,16 +34,31 @@ class NewsFetcher {
         newsApi = retrofit.create(NewsApi::class.java)
     }
 
+    fun searchUKHeadlinesRequest(): Call<NewsResult> {
+        return newsApi.fetchUKHeadlines()
+    }
+
     fun searchUKHeadlines(): LiveData<List<Article>> {
-        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
+        return fetchNews(searchUKHeadlinesRequest())
+    }
 
-        val newsRequest: Call<NewsResult> =  newsApi.fetchUKHeadlines()  //UKHeadlines is the default on startup
+    fun searchNewsQueryRequest(query: String): Call<NewsResult> {
+        return newsApi.fetchSearch(query)
+    }
+
+    fun searchNewsQuery(query: String): LiveData<List<Article>> {
+        return fetchNews(searchNewsQueryRequest(query))
+    }
+
+    private fun fetchNews(newsRequest: Call<NewsResult>) : LiveData<List<Article>> {
+        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
 
         newsRequest.enqueue(object: Callback<NewsResult> {
             override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
                 Log.d(TAG, "RESPONSE RECEIVED")
                 val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
+                val articleResponse = newsResponse?.articles?.toMutableList()
+                articleResponse?.sortByDescending{ it.publishedAt }
 
                 responseLiveData.value = articleResponse
             }
@@ -58,26 +72,4 @@ class NewsFetcher {
         return responseLiveData
     }
 
-    fun searchNews(query: String): LiveData<List<Article>> {
-        val responseLiveData: MutableLiveData<List<Article>> = MutableLiveData()
-
-        val newsRequest: Call<NewsResult> = newsApi.fetchSearch(query)
-
-        newsRequest.enqueue(object: Callback<NewsResult> {
-            override fun onResponse(call: Call<NewsResult>, response: Response<NewsResult>) {
-                Log.d(TAG, "RESPONSE RECEIVED")
-                val newsResponse : NewsResult? = response.body()
-                val articleResponse = newsResponse?.articles
-
-                responseLiveData.value = articleResponse
-            }
-
-            override fun onFailure(call: Call<NewsResult>, t: Throwable) {
-                Log.e(TAG, "ERROR FETCHING NEWS", t)
-            }
-
-        })
-
-        return responseLiveData
-    }
 }

@@ -27,6 +27,10 @@ private const val REQUEST_DELETE_STORY = 2
 
 class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
+    private lateinit var followedStoryViewModel: FollowedStoryViewModel
+    private lateinit var articleRecyclerView: RecyclerView
+    private lateinit var story: Story
+
     companion object {
         fun newInstance(story: Story): FollowedStoryFragment {
             val args = Bundle().apply {
@@ -37,10 +41,6 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
             }
         }
     }
-
-    private lateinit var followedStoryViewModel: FollowedStoryViewModel
-    private lateinit var articleRecyclerView: RecyclerView
-    private lateinit var story: Story
 
     override fun onStoryDeleted(story: Story) {
         followedStoryViewModel.deleteStoryAndArticles(story)
@@ -79,7 +79,7 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //TODO Replace deprecated functions
-        return if(item.itemId == R.id.menu_item_delete_story) {
+        return if (item.itemId == R.id.menu_item_delete_story) {
             StoryDeleteFragment.newInstance(story).apply {
                 setTargetFragment(this@FollowedStoryFragment, REQUEST_DELETE_STORY)
                 show(this@FollowedStoryFragment.requireFragmentManager(), DIALOG_STORY_DELETE)
@@ -107,8 +107,7 @@ class FollowedStoryFragment : Fragment(), StoryDeleteFragment.Callbacks {
 
             this.article = article
 
-            articleTitle.text =
-                getString(R.string.article_title_text, article.title, article.author)
+            articleTitle.text = article.title
             articleTitle.setTypeface(null, Typeface.BOLD)
             articleDescription.text = article.description
             articleDate.text = article.publishedAt.toString()
