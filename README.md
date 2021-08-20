@@ -10,7 +10,7 @@ App runs on Android devices with API Levels 26 - 30 (Android 8.0 Oreo to Android
 3. Open the downloaded directory
 
 ## Running the App
-For running the app on your own Android phone running the correct Android OS version, click [here](https://developer.android.com/studio/run/device#setting-up). \To
+For running the app on your own Android phone running the correct Android OS version, click [here](https://developer.android.com/studio/run/device#setting-up).
 
 To run the app on a virtual device:
 1. Go to the 'Tools' tab and click on 'AVD Manager'
